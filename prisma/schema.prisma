@@ -1,0 +1,857 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// SkillBridge — Prisma Schema
+// Database: Supabase PostgreSQL
+// ─────────────────────────────────────────────────────────────────────────────
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ENUMS
+// ═══════════════════════════════════════════════════════════════════════════
+
+enum UserRole {
+  STUDENT
+  INDUSTRY
+  INSTITUTION
+  ACADEMICIAN
+}
+
+enum OpportunityType {
+  INTERNSHIP
+  JOB
+  APPRENTICESHIP
+  LIVE_PROJECT
+  TRAINING
+  WORKSHOP
+  MENTORSHIP
+  FDP
+  FACULTY_INTERNSHIP
+  RESEARCH
+  CONSULTANCY
+}
+
+enum ApplicationStatus {
+  APPLIED
+  UNDER_REVIEW
+  SHORTLISTED
+  INTERVIEW
+  SELECTED
+  REJECTED
+}
+
+enum OpportunityStatus {
+  DRAFT
+  OPEN
+  CLOSED
+  COMPLETED
+}
+
+enum CollaborationStatus {
+  OPEN
+  APPLIED
+  ACTIVE
+  COMPLETED
+  REJECTED
+}
+
+enum MentorshipStatus {
+  PENDING
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum QuestionType {
+  MCQ
+  RATING
+  SCENARIO
+  SHORT_ANSWER
+}
+
+enum SkillCategory {
+  TECHNICAL
+  APTITUDE
+  SOFT_SKILL
+  DOMAIN
+}
+
+enum DifficultyLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum DocumentType {
+  RESUME
+  CERTIFICATE
+  INTERNSHIP_REPORT
+  ACADEMIC_DOCUMENT
+  COMPANY_VERIFICATION
+  OTHER
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// CORE — USERS
+// ═══════════════════════════════════════════════════════════════════════════
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  role         UserRole
+  name         String
+  phone        String?
+  location     String?
+  bio          String?
+  avatarUrl    String?  @map("avatar_url")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  studentProfile     StudentProfile?
+  industryProfile    IndustryProfile?
+  academicianProfile AcademicianProfile?
+  institutionProfile InstitutionProfile?
+  userSkills         UserSkill[]
+  skillScores        SkillScore[]
+  assessmentResults  AssessmentResult[]
+  notifications      Notification[]
+  documents          UserDocument[]
+  bookmarks          OpportunityBookmark[]
+  achievements       Achievement[]
+
+  @@index([role])
+  @@map("users")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// PROFILES
+// ═══════════════════════════════════════════════════════════════════════════
+
+model InstitutionProfile {
+  id                        String   @id @default(uuid()) @db.Uuid
+  userId                    String   @unique @map("user_id") @db.Uuid
+  name                      String
+  type                      String?
+  location                  String?
+  phone                     String?
+  email                     String?
+  website                   String?
+  about                     String?
+  logoUrl                   String?  @map("logo_url")
+  accreditation             String?
+  affiliation               String?
+  establishedYear           Int?     @map("established_year")
+  studentCount              Int?     @map("student_count")
+  facultyCount              Int?     @map("faculty_count")
+  departments               Json?
+  programs                  Json?
+  placementOfficerName      String?  @map("placement_officer_name")
+  placementOfficerEmail     String?  @map("placement_officer_email")
+  placementOfficerPhone     String?  @map("placement_officer_phone")
+  placementStats            Json?    @map("placement_stats")
+  internshipStats           Json?    @map("internship_stats")
+  industryPartnershipsCount Int?     @default(0) @map("industry_partnerships_count")
+  collabAreas               Json?    @map("collab_areas")
+  hasLiveProjects           Boolean  @default(true) @map("has_live_projects")
+  hasWorkshops              Boolean  @default(true) @map("has_workshops")
+  hasMentorship             Boolean  @default(true) @map("has_mentorship")
+  linkedinUrl               String?  @map("linkedin_url")
+  twitterUrl                String?  @map("twitter_url")
+  otherLinks                Json?    @map("other_links")
+  createdAt                 DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt                 DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  user                        User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  students                    StudentProfile[]
+  academicians                AcademicianProfile[]
+  collaborationsAsInstitution Collaboration[]      @relation("InstitutionCollaboration")
+
+  @@map("institution_profiles")
+}
+
+model StudentProfile {
+  id                  String   @id @default(uuid()) @db.Uuid
+  userId              String   @unique @map("user_id") @db.Uuid
+  institutionId       String?  @map("institution_id") @db.Uuid
+  institutionName     String?  @map("institution_name")
+  course              String?
+  department          String?
+  year                Int?
+  semester            Int?
+  graduationYear      Int?     @map("graduation_year")
+  cgpa                Decimal? @db.Decimal(4, 2)
+  dob                 DateTime? @db.Date
+  gender              String?
+  phone               String?
+  location            String?
+  bio                 String?
+  resumeUrl           String?  @map("resume_url")
+  careerGoal          String?  @map("career_goal")
+  preferredRoles      Json?    @map("preferred_roles")
+  preferredIndustries Json?    @map("preferred_industries")
+  preferredLocations  Json?    @map("preferred_locations")
+  workModePreference  String?  @default("HYBRID") @map("work_mode_preference") // REMOTE, HYBRID, ONSITE
+  githubUrl           String?  @map("github_url")
+  linkedinUrl         String?  @map("linkedin_url")
+  portfolioUrl        String?  @map("portfolio_url")
+  isPublic            Boolean  @default(true) @map("is_public")
+  publicFields        Json?    @map("public_fields")
+  portfolioSlug       String?  @unique @map("portfolio_slug")
+  createdAt           DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt           DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  user                    User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  institution             InstitutionProfile?      @relation(fields: [institutionId], references: [id], onDelete: SetNull)
+  applications            Application[]
+  projects                Project[]
+  certifications          Certification[]
+  educations              Education[]
+  experiences             Experience[]
+  mentorshipsAsMentee     Mentorship[]             @relation("MenteeRelation")
+  internshipProgress      InternshipProgress[]
+  learningRecommendations LearningRecommendation[]
+
+  @@index([institutionId])
+  @@map("student_profiles")
+}
+
+model IndustryProfile {
+  id                     String   @id @default(uuid()) @db.Uuid
+  userId                 String   @unique @map("user_id") @db.Uuid
+  companyName            String   @map("company_name")
+  industry               String?
+  website                String?
+  size                   String?
+  foundedYear            Int?     @map("founded_year")
+  headquarters           String?
+  phone                  String?
+  email                  String?
+  description            String?
+  mission                String?
+  culture                String?
+  logoUrl                String?  @map("logo_url")
+  hiringRoles            Json?    @map("hiring_roles")
+  preferredSkills        Json?    @map("preferred_skills")
+  experienceRequirements String?  @map("experience_requirements")
+  preferredDepartments   Json?    @map("preferred_departments")
+  workLocations          Json?    @map("work_locations")
+  workMode               String?  @default("HYBRID") @map("work_mode")
+  internshipHiring       Boolean  @default(true) @map("internship_hiring")
+  placementHiring        Boolean  @default(true) @map("placement_hiring")
+  areasOfExpertise       Json?    @map("areas_of_expertise")
+  technologies           Json?
+  benefits               Json?
+  linkedinUrl            String?  @map("linkedin_url")
+  twitterUrl             String?  @map("twitter_url")
+  otherLinks             Json?    @map("other_links")
+  isVerified             Boolean  @default(false) @map("is_verified")
+  verificationDocUrl     String?  @map("verification_doc_url")
+  createdAt              DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt              DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  user                    User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  opportunities           Opportunity[]
+  collaborationsAsIndustry Collaboration[] @relation("IndustryCollaboration")
+  mentorshipsAsMentor     Mentorship[]    @relation("MentorRelation")
+
+  @@map("industry_profiles")
+}
+
+model AcademicianProfile {
+  id                        String   @id @default(uuid()) @db.Uuid
+  userId                    String   @unique @map("user_id") @db.Uuid
+  institutionId             String?  @map("institution_id") @db.Uuid
+  institutionName           String?  @map("institution_name")
+  department                String?
+  designation               String?
+  specialization            String?
+  highestQualification      String?  @map("highest_qualification")
+  experience                Int?
+  phone                     String?
+  location                  String?
+  bio                       String?
+  areasOfExpertise          Json?    @map("areas_of_expertise")
+  researchInterests         Json?    @map("research_interests")
+  subjectsTaught            Json?    @map("subjects_taught")
+  technicalSkills           Json?    @map("technical_skills")
+  fdpsAttendedCount         Int?     @default(0) @map("fdps_attended_count")
+  fdpsConductedCount        Int?     @default(0) @map("fdps_conducted_count")
+  industryExperienceYears   Int?     @default(0) @map("industry_experience_years")
+  openForConsultancy        Boolean  @default(true) @map("open_for_consultancy")
+  openForResearch           Boolean  @default(true) @map("open_for_research")
+  openForFDP                Boolean  @default(true) @map("open_for_fdp")
+  openForMentorship         Boolean  @default(true) @map("open_for_mentorship")
+  openForFacultyInternship  Boolean  @default(true) @map("open_for_faculty_internship")
+  googleScholarUrl          String?  @map("google_scholar_url")
+  orcidUrl                  String?  @map("orcid_url")
+  linkedinUrl               String?  @map("linkedin_url")
+  researchGateUrl           String?  @map("research_gate_url")
+  personalWebsiteUrl        String?  @map("personal_website_url")
+  createdAt                 DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt                 DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  institution      InstitutionProfile? @relation(fields: [institutionId], references: [id], onDelete: SetNull)
+  publications     Publication[]
+  researchProjects ResearchProject[]
+  patents          Patent[]
+
+  @@index([institutionId])
+  @@map("academician_profiles")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SUB-RECORDS: EDUCATION, EXPERIENCE, ACHIEVEMENTS, PUBLICATIONS, PATENTS
+// ═══════════════════════════════════════════════════════════════════════════
+
+model Education {
+  id          String   @id @default(uuid()) @db.Uuid
+  studentId   String   @map("student_id") @db.Uuid
+  institution String
+  degree      String
+  department  String?
+  startYear   Int      @map("start_year")
+  endYear     Int?     @map("end_year")
+  grade       String?
+  isCurrent   Boolean  @default(false) @map("is_current")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  student StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+  @@map("educations")
+}
+
+model Experience {
+  id           String    @id @default(uuid()) @db.Uuid
+  studentId    String    @map("student_id") @db.Uuid
+  organization String
+  role         String
+  description  String?
+  startDate    DateTime? @map("start_date") @db.Date
+  endDate      DateTime? @map("end_date") @db.Date
+  isCurrent    Boolean   @default(false) @map("is_current")
+  skills       Json?
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  student StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+  @@map("experiences")
+}
+
+model Achievement {
+  id          String    @id @default(uuid()) @db.Uuid
+  userId      String    @map("user_id") @db.Uuid
+  title       String
+  category    String?   // AWARDS, HACKATHONS, COMPETITIONS, PUBLICATIONS, OTHER
+  issuer      String?
+  date        DateTime? @db.Date
+  description String?
+  url         String?
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("achievements")
+}
+
+model Publication {
+  id            String   @id @default(uuid()) @db.Uuid
+  academicianId String   @map("academician_id") @db.Uuid
+  title         String
+  journalOrConf String?  @map("journal_or_conf")
+  year          Int?
+  doi           String?
+  url           String?
+  authors       String?
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  academician AcademicianProfile @relation(fields: [academicianId], references: [id], onDelete: Cascade)
+
+  @@index([academicianId])
+  @@map("publications")
+}
+
+model ResearchProject {
+  id            String    @id @default(uuid()) @db.Uuid
+  academicianId String    @map("academician_id") @db.Uuid
+  title         String
+  fundingAgency String?   @map("funding_agency")
+  grantAmount   Decimal?  @map("grant_amount") @db.Decimal(12, 2)
+  duration      String?
+  status        String?   @default("ONGOING") // ONGOING, COMPLETED, PROPOSED
+  description   String?
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  academician AcademicianProfile @relation(fields: [academicianId], references: [id], onDelete: Cascade)
+
+  @@index([academicianId])
+  @@map("research_projects")
+}
+
+model Patent {
+  id            String    @id @default(uuid()) @db.Uuid
+  academicianId String    @map("academician_id") @db.Uuid
+  title         String
+  patentNumber  String?   @map("patent_number")
+  filingDate    DateTime? @map("filing_date") @db.Date
+  status        String?   @default("PENDING") // PENDING, GRANTED, PUBLISHED
+  url           String?
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  academician AcademicianProfile @relation(fields: [academicianId], references: [id], onDelete: Cascade)
+
+  @@index([academicianId])
+  @@map("patents")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SKILLS
+// ═══════════════════════════════════════════════════════════════════════════
+
+model Skill {
+  id          String        @id @default(uuid()) @db.Uuid
+  name        String        @unique
+  category    SkillCategory
+  description String?
+  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamptz
+
+  userSkills          UserSkill[]
+  skillScores         SkillScore[]
+  skillRequirements   SkillRequirement[]
+  assessmentQuestions AssessmentQuestion[]
+  projectSkills       ProjectSkill[]
+  careerRoleSkills    CareerRoleSkill[]
+  learningResources   LearningResource[]
+
+  @@index([name])
+  @@index([category])
+  @@map("skills")
+}
+
+model UserSkill {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  skillId   String   @map("skill_id") @db.Uuid
+  score     Decimal  @db.Decimal(5, 2)
+  verified  Boolean  @default(false)
+  source    String?
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skill Skill @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, skillId])
+  @@index([userId])
+  @@index([skillId])
+  @@map("user_skills")
+}
+
+model SkillScore {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  skillId   String   @map("skill_id") @db.Uuid
+  score     Decimal  @db.Decimal(5, 2)
+  source    String?
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skill Skill @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, skillId])
+  @@index([userId])
+  @@map("skill_scores")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ASSESSMENTS
+// ═══════════════════════════════════════════════════════════════════════════
+
+model Assessment {
+  id              String   @id @default(uuid()) @db.Uuid
+  title           String
+  targetRole      String   @map("target_role")
+  domain          String?
+  durationMinutes Int      @map("duration_minutes")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  questions AssessmentQuestion[]
+  results   AssessmentResult[]
+
+  @@map("assessments")
+}
+
+model AssessmentQuestion {
+  id            String          @id @default(uuid()) @db.Uuid
+  assessmentId  String          @map("assessment_id") @db.Uuid
+  question      String
+  questionType  QuestionType    @map("question_type")
+  category      SkillCategory
+  difficulty    DifficultyLevel
+  options       Json?
+  correctAnswer String?         @map("correct_answer")
+  rubric        String?
+  skillId       String?         @map("skill_id") @db.Uuid
+  marks         Int             @default(1)
+  orderIndex    Int             @map("order_index")
+
+  assessment Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  skill      Skill?     @relation(fields: [skillId], references: [id], onDelete: SetNull)
+
+  @@index([assessmentId])
+  @@map("assessment_questions")
+}
+
+model AssessmentResult {
+  id             String   @id @default(uuid()) @db.Uuid
+  userId         String   @map("user_id") @db.Uuid
+  assessmentId   String   @map("assessment_id") @db.Uuid
+  technicalScore Decimal? @map("technical_score") @db.Decimal(5, 2)
+  aptitudeScore  Decimal? @map("aptitude_score") @db.Decimal(5, 2)
+  softSkillScore Decimal? @map("soft_skill_score") @db.Decimal(5, 2)
+  overallScore   Decimal  @map("overall_score") @db.Decimal(5, 2)
+  completedAt    DateTime @default(now()) @map("completed_at") @db.Timestamptz
+
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  assessment Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([assessmentId])
+  @@map("assessment_results")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// OPPORTUNITIES
+// ═══════════════════════════════════════════════════════════════════════════
+
+model Opportunity {
+  id          String            @id @default(uuid()) @db.Uuid
+  industryId  String            @map("industry_id") @db.Uuid
+  type        OpportunityType
+  title       String
+  description String?
+  location    String?
+  remote      Boolean           @default(false)
+  duration    String?
+  stipend     Decimal?          @db.Decimal(10, 2)
+  salaryMin   Decimal?          @map("salary_min") @db.Decimal(10, 2)
+  salaryMax   Decimal?          @map("salary_max") @db.Decimal(10, 2)
+  eligibility String?
+  deadline    DateTime?         @db.Timestamptz
+  status      OpportunityStatus @default(OPEN)
+  createdAt   DateTime          @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime          @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  industry           IndustryProfile       @relation(fields: [industryId], references: [id], onDelete: Cascade)
+  skillRequirements  SkillRequirement[]
+  applications       Application[]
+  mentorships        Mentorship[]
+  bookmarks          OpportunityBookmark[]
+  internshipProgress InternshipProgress[]
+
+  @@index([industryId])
+  @@index([type])
+  @@index([status])
+  @@index([deadline])
+  @@index([type, status])
+  @@map("opportunities")
+}
+
+model SkillRequirement {
+  id            String  @id @default(uuid()) @db.Uuid
+  opportunityId String  @map("opportunity_id") @db.Uuid
+  skillId       String  @map("skill_id") @db.Uuid
+  requiredLevel Decimal @map("required_level") @db.Decimal(5, 2)
+  weight        Decimal @default(1.0) @db.Decimal(3, 2)
+
+  opportunity Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  skill       Skill       @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@unique([opportunityId, skillId])
+  @@index([opportunityId])
+  @@map("skill_requirements")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// APPLICATIONS
+// ═══════════════════════════════════════════════════════════════════════════
+
+model Application {
+  id            String            @id @default(uuid()) @db.Uuid
+  studentId     String            @map("student_id") @db.Uuid
+  opportunityId String            @map("opportunity_id") @db.Uuid
+  status        ApplicationStatus @default(APPLIED)
+  appliedAt     DateTime          @default(now()) @map("applied_at") @db.Timestamptz
+  updatedAt     DateTime          @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+  notes         String?
+
+  student     StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  opportunity Opportunity    @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, opportunityId])
+  @@index([studentId])
+  @@index([opportunityId])
+  @@index([status])
+  @@map("applications")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// PROJECTS & CERTIFICATIONS
+// ═══════════════════════════════════════════════════════════════════════════
+
+model Project {
+  id          String    @id @default(uuid()) @db.Uuid
+  studentId   String    @map("student_id") @db.Uuid
+  title       String
+  description String?
+  projectUrl  String?   @map("project_url")
+  githubUrl   String?   @map("github_url")
+  startDate   DateTime? @map("start_date") @db.Date
+  endDate     DateTime? @map("end_date") @db.Date
+  skillsJson  Json?     @map("skills_json")
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  student StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  skills  ProjectSkill[]
+
+  @@index([studentId])
+  @@map("projects")
+}
+
+model ProjectSkill {
+  id        String @id @default(uuid()) @db.Uuid
+  projectId String @map("project_id") @db.Uuid
+  skillId   String @map("skill_id") @db.Uuid
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  skill   Skill   @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, skillId])
+  @@map("project_skills")
+}
+
+model Certification {
+  id            String    @id @default(uuid()) @db.Uuid
+  studentId     String    @map("student_id") @db.Uuid
+  name          String
+  issuer        String?
+  issueDate     DateTime? @map("issue_date") @db.Date
+  expiryDate    DateTime? @map("expiry_date") @db.Date
+  credentialUrl String?   @map("credential_url")
+  documentUrl   String?   @map("document_url")
+  verified      Boolean   @default(false)
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  student StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+  @@map("certifications")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// MENTORSHIP & INTERNSHIP PROGRESS
+// ═══════════════════════════════════════════════════════════════════════════
+
+model Mentorship {
+  id            String           @id @default(uuid()) @db.Uuid
+  mentorId      String           @map("mentor_id") @db.Uuid
+  menteeId      String           @map("mentee_id") @db.Uuid
+  opportunityId String?          @map("opportunity_id") @db.Uuid
+  status        MentorshipStatus @default(PENDING)
+  feedback      String?
+  createdAt     DateTime         @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  mentor      IndustryProfile @relation("MentorRelation", fields: [mentorId], references: [id])
+  mentee      StudentProfile  @relation("MenteeRelation", fields: [menteeId], references: [id])
+  opportunity Opportunity?    @relation(fields: [opportunityId], references: [id], onDelete: SetNull)
+
+  @@index([mentorId])
+  @@index([menteeId])
+  @@map("mentorships")
+}
+
+model InternshipProgress {
+  id            String   @id @default(uuid()) @db.Uuid
+  studentId     String   @map("student_id") @db.Uuid
+  opportunityId String   @map("opportunity_id") @db.Uuid
+  week          Int
+  summary       String?
+  feedback      String?
+  rating        Int?
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  student     StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  opportunity Opportunity    @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, opportunityId, week])
+  @@map("internship_progress")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// COLLABORATIONS
+// ═══════════════════════════════════════════════════════════════════════════
+
+model Collaboration {
+  id            String              @id @default(uuid()) @db.Uuid
+  industryId    String              @map("industry_id") @db.Uuid
+  institutionId String              @map("institution_id") @db.Uuid
+  type          String
+  title         String
+  description   String?
+  status        CollaborationStatus @default(OPEN)
+  createdAt     DateTime            @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime            @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  industry    IndustryProfile    @relation("IndustryCollaboration", fields: [industryId], references: [id])
+  institution InstitutionProfile @relation("InstitutionCollaboration", fields: [institutionId], references: [id])
+
+  @@index([industryId])
+  @@index([institutionId])
+  @@map("collaborations")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// CAREER ROLES (for career recommendation engine)
+// ═══════════════════════════════════════════════════════════════════════════
+
+model CareerRole {
+  id          String   @id @default(uuid()) @db.Uuid
+  title       String   @unique
+  description String?
+  domain      String?
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  skills CareerRoleSkill[]
+
+  @@map("career_roles")
+}
+
+model CareerRoleSkill {
+  id            String  @id @default(uuid()) @db.Uuid
+  careerRoleId  String  @map("career_role_id") @db.Uuid
+  skillId       String  @map("skill_id") @db.Uuid
+  requiredLevel Decimal @map("required_level") @db.Decimal(5, 2)
+  weight        Decimal @default(1.0) @db.Decimal(3, 2)
+  priority      Int     @default(0)
+
+  careerRole CareerRole @relation(fields: [careerRoleId], references: [id], onDelete: Cascade)
+  skill      Skill      @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@unique([careerRoleId, skillId])
+  @@map("career_role_skills")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// LEARNING
+// ═══════════════════════════════════════════════════════════════════════════
+
+model LearningResource {
+  id          String           @id @default(uuid()) @db.Uuid
+  title       String
+  provider    String?
+  url         String?
+  type        String?
+  skillId     String?          @map("skill_id") @db.Uuid
+  description String?
+  duration    String?
+  difficulty  DifficultyLevel?
+  createdAt   DateTime         @default(now()) @map("created_at") @db.Timestamptz
+
+  skill           Skill?                   @relation(fields: [skillId], references: [id], onDelete: SetNull)
+  recommendations LearningRecommendation[]
+
+  @@index([skillId])
+  @@map("learning_resources")
+}
+
+model LearningRecommendation {
+  id         String   @id @default(uuid()) @db.Uuid
+  studentId  String   @map("student_id") @db.Uuid
+  resourceId String   @map("resource_id") @db.Uuid
+  priority   Int      @default(0)
+  reason     String?
+  completed  Boolean  @default(false)
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  student  StudentProfile   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  resource LearningResource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+  @@map("learning_recommendations")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// NOTIFICATIONS
+// ═══════════════════════════════════════════════════════════════════════════
+
+model Notification {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  type      String
+  title     String
+  message   String?
+  link      String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([read])
+  @@index([userId, read])
+  @@map("notifications")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// BOOKMARKS & DOCUMENTS
+// ═══════════════════════════════════════════════════════════════════════════
+
+model OpportunityBookmark {
+  id            String   @id @default(uuid()) @db.Uuid
+  userId        String   @map("user_id") @db.Uuid
+  opportunityId String   @map("opportunity_id") @db.Uuid
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  opportunity Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, opportunityId])
+  @@map("opportunity_bookmarks")
+}
+
+model UserDocument {
+  id          String       @id @default(uuid()) @db.Uuid
+  userId      String       @map("user_id") @db.Uuid
+  type        DocumentType
+  name        String
+  storagePath String       @map("storage_path")
+  mimeType    String?      @map("mime_type")
+  size        Int?
+  verified    Boolean      @default(false)
+  uploadedAt  DateTime     @default(now()) @map("uploaded_at") @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([type])
+  @@map("user_documents")
+}

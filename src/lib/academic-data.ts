@@ -1,0 +1,528 @@
+/**
+ * Comprehensive Course & Department Dataset for SkillBridge
+ * Data-driven academic structure for undergraduate and postgraduate programs.
+ */
+
+export interface CourseOption {
+  id: string;
+  name: string;
+  category: "UG" | "PG" | "DIPLOMA" | "OTHER";
+  departments: string[];
+}
+
+export const ACADEMIC_COURSES: CourseOption[] = [
+  // ─── UNDERGRADUATE PROGRAMS ─────────────────────────────────────────
+  {
+    id: "btech_be",
+    name: "B.Tech / BE (Bachelor of Technology / Engineering)",
+    category: "UG",
+    departments: [
+      "Computer Science & Engineering",
+      "Artificial Intelligence & Machine Learning",
+      "Data Science & Analytics",
+      "Information Technology",
+      "Cyber Security & Forensics",
+      "Internet of Things (IoT)",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering",
+      "Chemical Engineering",
+      "Biotechnology Engineering",
+      "Aerospace & Aeronautical Engineering",
+      "Automobile Engineering",
+      "Robotics & Automation",
+      "Biomedical Engineering",
+      "Industrial & Production Engineering",
+      "Metallurgical & Materials Engineering",
+      "Environmental Engineering",
+      "Other Engineering Specialization",
+    ],
+  },
+  {
+    id: "bca",
+    name: "BCA (Bachelor of Computer Applications)",
+    category: "UG",
+    departments: [
+      "Computer Applications",
+      "Information Technology & Web Development",
+      "Cloud Computing & DevOps",
+      "Data Science & AI",
+      "Cyber Security",
+      "Software Development",
+      "Mobile Application Development",
+      "Other",
+    ],
+  },
+  {
+    id: "bsc_cs",
+    name: "B.Sc Computer Science",
+    category: "UG",
+    departments: [
+      "Computer Science",
+      "Artificial Intelligence",
+      "Data Science",
+      "Software Engineering",
+      "Information Security",
+      "Other",
+    ],
+  },
+  {
+    id: "bsc_it",
+    name: "B.Sc Information Technology",
+    category: "UG",
+    departments: [
+      "Information Technology",
+      "Network Engineering",
+      "Web Technologies",
+      "Database Systems",
+      "Other",
+    ],
+  },
+  {
+    id: "bsc",
+    name: "B.Sc (Bachelor of Science - General / Pure Sciences)",
+    category: "UG",
+    departments: [
+      "Mathematics",
+      "Physics",
+      "Chemistry",
+      "Statistics",
+      "Electronics",
+      "Biochemistry",
+      "Microbiology",
+      "Biotechnology",
+      "Botany",
+      "Zoology",
+      "Environmental Science",
+      "Geology",
+      "Other Science Discipline",
+    ],
+  },
+  {
+    id: "bba",
+    name: "BBA (Bachelor of Business Administration)",
+    category: "UG",
+    departments: [
+      "Finance",
+      "Marketing",
+      "Human Resource Management",
+      "Business Analytics",
+      "International Business",
+      "Operations & Supply Chain",
+      "Entrepreneurship & Family Business",
+      "Digital Marketing",
+      "Banking & Financial Services",
+      "Other",
+    ],
+  },
+  {
+    id: "bcom",
+    name: "B.Com (Bachelor of Commerce)",
+    category: "UG",
+    departments: [
+      "Accounting & Finance",
+      "Banking & Insurance",
+      "Taxation",
+      "Financial Markets",
+      "Business Analytics & FinTech",
+      "Corporate Secretaryship",
+      "E-Commerce",
+      "General Commerce",
+      "Other",
+    ],
+  },
+  {
+    id: "ba",
+    name: "BA (Bachelor of Arts)",
+    category: "UG",
+    departments: [
+      "Economics",
+      "English Literature & Linguistics",
+      "Psychology",
+      "Political Science",
+      "Sociology",
+      "Journalism & Mass Communication",
+      "History",
+      "Public Administration",
+      "Geography",
+      "Philosophy",
+      "Foreign Languages",
+      "Other Humanities Discipline",
+    ],
+  },
+  {
+    id: "bdes",
+    name: "B.Des (Bachelor of Design)",
+    category: "UG",
+    departments: [
+      "UI/UX & Interaction Design",
+      "Product & Industrial Design",
+      "Communication & Graphic Design",
+      "Fashion Design",
+      "Animation & VFX",
+      "Interior & Spatial Design",
+      "Other",
+    ],
+  },
+  {
+    id: "barch",
+    name: "B.Arch (Bachelor of Architecture)",
+    category: "UG",
+    departments: [
+      "Architectural Design",
+      "Urban Planning & Design",
+      "Sustainable & Green Architecture",
+      "Landscape Architecture",
+      "Interior Architecture",
+      "Other",
+    ],
+  },
+  {
+    id: "bpharm",
+    name: "B.Pharm (Bachelor of Pharmacy)",
+    category: "UG",
+    departments: [
+      "Pharmaceutics",
+      "Pharmaceutical Chemistry",
+      "Pharmacology",
+      "Pharmacognosy",
+      "Quality Assurance & Regulatory Affairs",
+      "Other",
+    ],
+  },
+  {
+    id: "mbbs",
+    name: "MBBS (Bachelor of Medicine & Bachelor of Surgery)",
+    category: "UG",
+    departments: [
+      "General Medicine",
+      "General Surgery",
+      "Pediatrics",
+      "Community Medicine",
+      "Pathology",
+      "Pharmacology",
+      "Biochemistry",
+      "Other Clinical Branch",
+    ],
+  },
+  {
+    id: "bds",
+    name: "BDS (Bachelor of Dental Surgery)",
+    category: "UG",
+    departments: [
+      "Conservative Dentistry & Endodontics",
+      "Oral & Maxillofacial Surgery",
+      "Orthodontics",
+      "Periodontology",
+      "Prosthodontics",
+      "Pedodontics",
+      "Other",
+    ],
+  },
+  {
+    id: "bpt",
+    name: "BPT (Bachelor of Physiotherapy)",
+    category: "UG",
+    departments: [
+      "Orthopedic Physiotherapy",
+      "Neurological Physiotherapy",
+      "Cardiopulmonary Physiotherapy",
+      "Sports Physiotherapy",
+      "Pediatric Physiotherapy",
+      "Other",
+    ],
+  },
+  {
+    id: "bsc_nursing",
+    name: "B.Sc Nursing",
+    category: "UG",
+    departments: [
+      "Medical-Surgical Nursing",
+      "Community Health Nursing",
+      "Child Health Nursing",
+      "Mental Health Nursing",
+      "Obstetrics & Gynecological Nursing",
+      "Other",
+    ],
+  },
+  {
+    id: "llb_ballb",
+    name: "LLB / BA LLB / BBA LLB (Law Programs)",
+    category: "UG",
+    departments: [
+      "Corporate & Commercial Law",
+      "Constitutional & Administrative Law",
+      "Criminal Law & Criminology",
+      "Intellectual Property Rights (IPR)",
+      "Cyber Law & Digital Governance",
+      "International Trade Law",
+      "Environmental & Human Rights Law",
+      "General Law",
+      "Other",
+    ],
+  },
+  {
+    id: "bed",
+    name: "B.Ed (Bachelor of Education)",
+    category: "UG",
+    departments: [
+      "Science Education",
+      "Mathematics Education",
+      "Language & Humanities Education",
+      "Social Science Education",
+      "Special Education",
+      "Educational Technology",
+      "Other",
+    ],
+  },
+  {
+    id: "bhm",
+    name: "BHM (Bachelor of Hotel Management / Hospitality)",
+    category: "UG",
+    departments: [
+      "Food & Beverage Management",
+      "Front Office & Hospitality Operations",
+      "Culinary Arts",
+      "Housekeeping & Facilities",
+      "Travel & Tourism Management",
+      "Other",
+    ],
+  },
+  {
+    id: "bvoc",
+    name: "B.Voc (Bachelor of Vocation)",
+    category: "UG",
+    departments: [
+      "Software Development",
+      "Retail Management",
+      "Automobile Servicing",
+      "Banking & Financial Services",
+      "Healthcare & Medical Lab Technology",
+      "Renewable Energy Management",
+      "Other Vocational Trade",
+    ],
+  },
+  {
+    id: "diploma",
+    name: "Polytechnic / Engineering Diploma",
+    category: "DIPLOMA",
+    departments: [
+      "Computer Engineering",
+      "Information Technology",
+      "Electronics & Communication",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering",
+      "Automobile Engineering",
+      "Chemical Engineering",
+      "Other Diploma Stream",
+    ],
+  },
+
+  // ─── POSTGRADUATE PROGRAMS ──────────────────────────────────────────
+  {
+    id: "mtech_me",
+    name: "M.Tech / ME (Master of Technology / Engineering)",
+    category: "PG",
+    departments: [
+      "Computer Science & Engineering",
+      "Artificial Intelligence & Data Analytics",
+      "VLSI & Embedded Systems",
+      "Thermal & Fluids Engineering",
+      "Structural Engineering",
+      "Power Systems & Control",
+      "Signal Processing & Communications",
+      "Cyber Security",
+      "Software Engineering",
+      "Biotechnology",
+      "Other Specialization",
+    ],
+  },
+  {
+    id: "mca",
+    name: "MCA (Master of Computer Applications)",
+    category: "PG",
+    departments: [
+      "Computer Applications & Advanced Software",
+      "Data Science & Big Data",
+      "Artificial Intelligence & Machine Learning",
+      "Cloud Architecture & Enterprise Computing",
+      "Cyber Security & Ethical Hacking",
+      "Full-Stack Web & Mobile Technologies",
+      "Other",
+    ],
+  },
+  {
+    id: "mba",
+    name: "MBA (Master of Business Administration)",
+    category: "PG",
+    departments: [
+      "Finance & Investment Banking",
+      "Marketing & Brand Management",
+      "Human Resource Management",
+      "Business Analytics & AI",
+      "Operations & Supply Chain Management",
+      "Information Technology Management",
+      "International Business",
+      "Product Management & Strategy",
+      "FinTech & Digital Banking",
+      "Healthcare & Hospital Management",
+      "Rural & Agri-Business Management",
+      "Other",
+    ],
+  },
+  {
+    id: "msc",
+    name: "M.Sc (Master of Science)",
+    category: "PG",
+    departments: [
+      "Computer Science",
+      "Data Science & Analytics",
+      "Information Technology",
+      "Mathematics & Computing",
+      "Physics & Astrophysics",
+      "Applied Chemistry & Materials",
+      "Statistics & Operations Research",
+      "Biotechnology & Genomics",
+      "Microbiology",
+      "Biochemistry",
+      "Environmental Science",
+      "Other",
+    ],
+  },
+  {
+    id: "mcom",
+    name: "M.Com (Master of Commerce)",
+    category: "PG",
+    departments: [
+      "Accounting & Auditing",
+      "Finance & Banking",
+      "Taxation & Corporate Law",
+      "International Trade & Business",
+      "Business Analytics",
+      "Other",
+    ],
+  },
+  {
+    id: "ma",
+    name: "MA (Master of Arts)",
+    category: "PG",
+    departments: [
+      "Economics & Econometrics",
+      "English & Comparative Literature",
+      "Applied Psychology & Clinical Studies",
+      "Mass Communication & Journalism",
+      "Political Science & International Relations",
+      "Public Policy & Governance",
+      "Sociology & Social Work",
+      "Other",
+    ],
+  },
+  {
+    id: "mdes",
+    name: "M.Des (Master of Design)",
+    category: "PG",
+    departments: [
+      "Interaction Design & UI/UX",
+      "Industrial & Product Design",
+      "Visual Communication & Branding",
+      "Design Strategy & Innovation",
+      "Other",
+    ],
+  },
+  {
+    id: "march",
+    name: "M.Arch (Master of Architecture)",
+    category: "PG",
+    departments: [
+      "Urban Design & Planning",
+      "Environmental & Sustainable Architecture",
+      "Architectural Conservation",
+      "Landscape Architecture",
+      "Other",
+    ],
+  },
+  {
+    id: "mpharm",
+    name: "M.Pharm (Master of Pharmacy)",
+    category: "PG",
+    departments: [
+      "Pharmaceutics & Drug Delivery",
+      "Pharmacology & Toxicology",
+      "Pharmaceutical Analysis",
+      "Regulatory Affairs",
+      "Other",
+    ],
+  },
+  {
+    id: "llm",
+    name: "LLM (Master of Laws)",
+    category: "PG",
+    departments: [
+      "Corporate & Commercial Law",
+      "Constitutional & Administrative Law",
+      "Intellectual Property Law",
+      "International Trade & Business Law",
+      "Technology & Cyber Law",
+      "Criminal Law",
+      "Other",
+    ],
+  },
+  {
+    id: "med",
+    name: "M.Ed (Master of Education)",
+    category: "PG",
+    departments: [
+      "Curriculum & Pedagogy Studies",
+      "Educational Leadership & Policy",
+      "Educational Technology",
+      "Special Education",
+      "Other",
+    ],
+  },
+  {
+    id: "mph",
+    name: "MPH (Master of Public Health)",
+    category: "PG",
+    departments: [
+      "Epidemiology & Biostatistics",
+      "Health Policy & Systems",
+      "Environmental & Occupational Health",
+      "Global Health & Disease Control",
+      "Other",
+    ],
+  },
+
+  // ─── OTHER DEGREE / CUSTOM ──────────────────────────────────────────
+  {
+    id: "other_degree",
+    name: "Other Degree / Program",
+    category: "OTHER",
+    departments: [
+      "General Studies",
+      "Interdisciplinary Program",
+      "Vocational & Applied Training",
+      "Other Specialization",
+    ],
+  },
+];
+
+/**
+ * Helper to get departments for a given course name or ID
+ */
+export function getDepartmentsForCourse(courseIdentifier: string): string[] {
+  const match = ACADEMIC_COURSES.find(
+    (c) =>
+      c.id.toLowerCase() === courseIdentifier.toLowerCase() ||
+      c.name.toLowerCase().startsWith(courseIdentifier.toLowerCase()) ||
+      courseIdentifier.toLowerCase().includes(c.name.split(" ")[0].toLowerCase())
+  );
+
+  if (match) {
+    return match.departments;
+  }
+
+  // Default broad engineering & technology fallback
+  return ACADEMIC_COURSES[0].departments;
+}

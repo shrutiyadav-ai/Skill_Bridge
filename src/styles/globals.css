@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #f8fafc;
+    --foreground: #0f172a;
+    --card: #ffffff;
+    --card-foreground: #0f172a;
+    --border: #e2e8f0;
+    --input: #e2e8f0;
+    --primary: #1e3a5f;
+    --primary-foreground: #ffffff;
+    --secondary: #f1f5f9;
+    --secondary-foreground: #1e293b;
+    --muted: #f8fafc;
+    --muted-foreground: #64748b;
+    --accent: #f1f5f9;
+    --accent-foreground: #0f172a;
+    --destructive: #ef4444;
+    --destructive-foreground: #ffffff;
+    --ring: #1e3a5f;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: #020617;
+    --foreground: #f8fafc;
+    --card: #0f172a;
+    --card-foreground: #f8fafc;
+    --border: #1e293b;
+    --input: #1e293b;
+    --primary: #3b82f6;
+    --primary-foreground: #ffffff;
+    --secondary: #1e293b;
+    --secondary-foreground: #f8fafc;
+    --muted: #0b1120;
+    --muted-foreground: #94a3b8;
+    --accent: #1e293b;
+    --accent-foreground: #f8fafc;
+    --destructive: #f87171;
+    --destructive-foreground: #ffffff;
+    --ring: #3b82f6;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 antialiased selection:bg-navy-100 selection:text-navy-900 dark:selection:bg-navy-800 dark:selection:text-navy-100;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+@layer components {
+  /* Clean Enterprise Form Controls */
+  .input-field {
+    @apply w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-md text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-navy-800 dark:focus:ring-blue-500 focus:border-navy-800 dark:focus:border-blue-500 transition duration-150 disabled:bg-slate-50 dark:disabled:bg-slate-800/60 disabled:text-slate-500 dark:disabled:text-slate-400 disabled:cursor-not-allowed;
+  }
+
+  .label-text {
+    @apply block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5;
+  }
+
+  /* Enterprise Table Styling */
+  .data-table {
+    @apply min-w-full divide-y divide-slate-200 dark:divide-slate-800 text-left text-sm;
+  }
+
+  .data-table th {
+    @apply bg-slate-100/75 dark:bg-slate-900/80 px-4 py-3 text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 border-b border-slate-200 dark:border-slate-800;
+  }
+
+  .data-table td {
+    @apply px-4 py-3.5 text-sm text-slate-800 dark:text-slate-200 border-b border-slate-100 dark:border-slate-800/60 whitespace-nowrap;
+  }
+
+  .data-table tr:hover td {
+    @apply bg-slate-50/80 dark:bg-slate-850/80;
+  }
+
+  /* Stat Card */
+  .metric-card {
+    @apply bg-white dark:bg-slate-900 p-5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-sm transition hover:border-slate-300 dark:hover:border-slate-700;
+  }
+}
+
+/* Custom Scrollbar for sidebars and tables */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
