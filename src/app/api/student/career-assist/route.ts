@@ -5,10 +5,9 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { question, studentName, targetRole, readiness, strongSkills, gaps } = body;
 
-    const geminiKey = process.env.GEMINI_API_KEY;
+    const apiKey = process.env.GROQ_API_KEY || process.env.GEMINI_API_KEY;
 
-    if (geminiKey && geminiKey !== "your_gemini_api_key") {
-      // Call Google Gemini API
+    if (apiKey && apiKey !== "your_gemini_api_key") {
       try {
         const prompt = `You are the SkillBridge AI Career Advisor for an Indian university platform.
 Student: ${studentName || "Student"}
@@ -21,31 +20,63 @@ User question: "${question}"
 
 Provide a concise, practical, and highly specific 2-3 sentence answer based on their actual verified skill vector and Indian tech industry standards. Do not output generic fluff.`;
 
-        const geminiRes = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`,
-          {
+        if (apiKey.startsWith("gsk_")) {
+          // Call Groq Cloud API
+          const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${apiKey}`,
+            },
             body: JSON.stringify({
-              contents: [{ parts: [{ text: prompt }] }],
+              model: "groq/compound-mini",
+              messages: [
+                {
+                  role: "system",
+                  content: "You are the SkillBridge AI Career Advisor for Indian engineering and university students. Provide concise, practical, and direct advice in 2-3 sentences.",
+                },
+                { role: "user", content: prompt },
+              ],
+              max_tokens: 250,
+              temperature: 0.5,
             }),
-          }
-        );
+          });
 
-        if (geminiRes.ok) {
-          const data = await geminiRes.json();
-          const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-          if (text) {
-            return NextResponse.json({ answer: text.trim() });
+          if (groqRes.ok) {
+            const data = await groqRes.json();
+            const text = data.choices?.[0]?.message?.content;
+            if (text && text.trim()) {
+              return NextResponse.json({ answer: text.trim() });
+            }
+          }
+        } else {
+          // Call Google Gemini API
+          const geminiRes = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                contents: [{ parts: [{ text: prompt }] }],
+              }),
+            }
+          );
+
+          if (geminiRes.ok) {
+            const data = await geminiRes.json();
+            const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (text) {
+              return NextResponse.json({ answer: text.trim() });
+            }
           }
         }
       } catch (apiErr) {
-        console.warn("Gemini API call error, falling back to deterministic response:", apiErr);
+        console.warn("AI API call error, falling back to deterministic response:", apiErr);
       }
     }
 
     // Contextual deterministic response based on real student vector
-    let answer = `For the ${targetRole} role, your current verified readiness is ${readiness}%. Closing your priority gaps in ${(gaps || ["SQL"]).slice(0, 2).join(" and ")} through hands-on projects will elevate your industry match score above 90%.`;
+    let answer = `For the ${targetRole || "target"} role, your current verified readiness is ${readiness || 78}%. Closing your priority gaps in ${(gaps || ["SQL"]).slice(0, 2).join(" and ")} through hands-on projects will elevate your industry match score above 90%.`;
 
     const qLower = (question || "").toLowerCase();
     if (qLower.includes("sql") || qLower.includes("gap")) {
