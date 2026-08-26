@@ -47,33 +47,78 @@ export default function StudentDashboardPage() {
   const [userSkills, setUserSkills] = useState(isDemoStudent ? MOCK_STUDENT_SKILLS : []);
   const [userApplications, setUserApplications] = useState(isDemoStudent ? MOCK_APPLICATIONS : []);
 
+  const [careerRoles, setCareerRoles] = useState<any[]>([]);
+  const [selectedRoleIndex, setSelectedRoleIndex] = useState(0);
+
   useEffect(() => {
-    if (!isDemoStudent) {
-      const stored = localStorage.getItem(`assessed_skills_${studentEmail}`);
-      if (stored) {
-        try {
-          setUserSkills(JSON.parse(stored));
-        } catch (e) {}
-      }
-      const storedApps = localStorage.getItem(`applications_${studentEmail}`);
-      if (storedApps) {
-        try {
-          setUserApplications(JSON.parse(storedApps));
-        } catch (e) {}
+    async function loadDashboardData() {
+      try {
+        // 1. Load Profile Skills
+        const res = await fetch("/api/profile");
+        if (res.ok) {
+          const profileData = await res.json();
+          if (profileData.userSkills && profileData.userSkills.length > 0) {
+            const mapped = profileData.userSkills.map((us: any) => ({
+              id: us.id,
+              skillId: us.skillId,
+              skillName: us.skill?.name || us.skillName || "Skill",
+              category: us.skill?.category || us.category || "TECHNICAL",
+              score: Number(us.score),
+              verified: us.verified ?? true,
+              source: us.source || "assessment",
+            }));
+            setUserSkills(mapped);
+          }
+        }
+
+        // 2. Load Course-Specific Career Roles
+        const rolesRes = await fetch("/api/student/career-roles");
+        if (rolesRes.ok) {
+          const rolesData = await rolesRes.json();
+          if (rolesData.careerRoles && rolesData.careerRoles.length > 0) {
+            setCareerRoles(rolesData.careerRoles);
+          }
+        }
+      } catch (e) {}
+
+      // Check local storage for skills and applications
+      if (studentEmail) {
+        const stored = localStorage.getItem(`assessed_skills_${studentEmail}`);
+        if (stored && userSkills.length === 0) {
+          try {
+            setUserSkills(JSON.parse(stored));
+          } catch (e) {}
+        }
+        const storedApps = localStorage.getItem(`applications_${studentEmail}`);
+        if (storedApps) {
+          try {
+            setUserApplications(JSON.parse(storedApps));
+          } catch (e) {}
+        }
       }
     }
-  }, [isDemoStudent, studentEmail]);
 
-  // Compute live match metrics
-  const targetRole = MOCK_CAREER_ROLES[0]; // Machine Learning Engineer
+    if (studentEmail) {
+      loadDashboardData();
+    }
+  }, [studentEmail]);
+
+  // Dynamic Course-Specific Target Role
+  const targetRole = careerRoles[selectedRoleIndex] || MOCK_CAREER_ROLES[0];
   const hasSkills = userSkills.length > 0;
   const { readinessPercentage, roadmapSteps, matchResult } = calculateCareerReadiness(
     userSkills,
-    targetRole.skills
+    targetRole.skills || [],
+    {
+      roleTitle: targetRole.title,
+      domain: targetRole.domain,
+      certifications: targetRole.certifications,
+      toolsAndTechnologies: targetRole.toolsAndTechnologies,
+    }
   );
 
   const displayReadiness = hasSkills ? readinessPercentage : 0;
-  const displayIndustryMatch = hasSkills ? 86 : 0;
+  const displayIndustryMatch = hasSkills ? Math.min(95, Math.max(60, displayReadiness + 8)) : 0;
 
   // AI Assistant Widget State
   const [assistantOpen, setAssistantOpen] = useState(false);

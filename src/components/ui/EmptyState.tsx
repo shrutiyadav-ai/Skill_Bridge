@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { FolderOpen } from "lucide-react";
 
 export interface EmptyStateProps {
-  icon?: React.ReactNode;
+  icon?: React.ReactNode | React.ElementType;
   title: string;
   description: string;
   action?: React.ReactNode;
@@ -11,12 +11,22 @@ export interface EmptyStateProps {
 }
 
 export function EmptyState({
-  icon = <FolderOpen className="h-8 w-8 text-slate-400 dark:text-slate-500" />,
+  icon = FolderOpen,
   title,
   description,
   action,
   className,
 }: EmptyStateProps) {
+  const renderIcon = () => {
+    if (!icon) return null;
+    if (React.isValidElement(icon)) return icon;
+    if (typeof icon === "function" || (typeof icon === "object" && icon !== null && "$$typeof" in icon)) {
+      const IconComponent = icon as React.ElementType;
+      return <IconComponent className="h-8 w-8 text-slate-400 dark:text-slate-500" />;
+    }
+    return icon as React.ReactNode;
+  };
+
   return (
     <div
       className={cn(
@@ -24,7 +34,9 @@ export function EmptyState({
         className
       )}
     >
-      <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-full mb-3 text-slate-500 dark:text-slate-400">{icon}</div>
+      <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-full mb-3 text-slate-500 dark:text-slate-400 flex items-center justify-center">
+        {renderIcon()}
+      </div>
       <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-1">{title}</h3>
       <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mb-4 leading-relaxed">{description}</p>
       {action && <div>{action}</div>}

@@ -22,6 +22,7 @@ model User {
   phone              String?
   academicianProfile AcademicianProfile?
   achievements       Achievement[]
+  assessmentAttempts AssessmentAttempt[]
   assessmentResults  AssessmentResult[]
   industryProfile    IndustryProfile?
   institutionProfile InstitutionProfile?
@@ -363,47 +364,110 @@ model SkillScore {
 model Assessment {
   id              String               @id @default(uuid()) @db.Uuid
   title           String
-  targetRole      String               @map("target_role")
+  targetRole      String?              @map("target_role")
+  course          String?              @map("course")
+  department      String?              @map("department")
   domain          String?
   durationMinutes Int                  @map("duration_minutes")
+  passingScore    Decimal?             @default(70.0) @map("passing_score") @db.Decimal(5, 2)
   createdAt       DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
   questions       AssessmentQuestion[]
   results         AssessmentResult[]
+  attempts        AssessmentAttempt[]
 
   @@map("assessments")
 }
 
 model AssessmentQuestion {
   id            String          @id @default(uuid()) @db.Uuid
-  assessmentId  String          @map("assessment_id") @db.Uuid
+  assessmentId  String?         @map("assessment_id") @db.Uuid
+  course        String?         @map("course")
+  department    String?         @map("department")
+  subject       String?         @map("subject")
+  topic         String?         @map("topic")
   question      String
   questionType  QuestionType    @map("question_type")
   category      SkillCategory
   difficulty    DifficultyLevel
   options       Json?
   correctAnswer String?         @map("correct_answer")
+  explanation   String?
   rubric        String?
   skillId       String?         @map("skill_id") @db.Uuid
+  skillName     String?         @map("skill_name")
   marks         Int             @default(1)
-  orderIndex    Int             @map("order_index")
-  assessment    Assessment      @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  orderIndex    Int?            @map("order_index")
+  isActive      Boolean         @default(true) @map("is_active")
+  createdAt     DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  assessment    Assessment?     @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
   skill         Skill?          @relation(fields: [skillId], references: [id])
+  attemptAnswers AttemptAnswer[]
 
   @@index([assessmentId])
+  @@index([course])
+  @@index([department])
+  @@index([category])
+  @@index([difficulty])
+  @@index([isActive])
   @@map("assessment_questions")
 }
 
+model AssessmentAttempt {
+  id              String           @id @default(uuid()) @db.Uuid
+  userId          String           @map("user_id") @db.Uuid
+  assessmentId    String?          @map("assessment_id") @db.Uuid
+  course          String?
+  department      String?
+  attemptNumber   Int              @map("attempt_number")
+  overallScore    Decimal          @map("overall_score") @db.Decimal(5, 2)
+  technicalScore  Decimal?         @map("technical_score") @db.Decimal(5, 2)
+  aptitudeScore   Decimal?         @map("aptitude_score") @db.Decimal(5, 2)
+  softSkillScore  Decimal?         @map("soft_skill_score") @db.Decimal(5, 2)
+  passed          Boolean          @default(false)
+  durationSeconds Int?             @map("duration_seconds")
+  totalQuestions  Int              @default(0) @map("total_questions")
+  correctAnswers  Int              @default(0) @map("correct_answers")
+  skillBreakdown  Json?            @map("skill_breakdown")
+  strongSkills    Json?            @map("strong_skills")
+  weakSkills      Json?            @map("weak_skills")
+  skillGaps       Json?            @map("skill_gaps")
+  recommendations Json?            @map("recommendations")
+  completedAt     DateTime         @default(now()) @map("completed_at") @db.Timestamptz(6)
+  createdAt       DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  assessment      Assessment?      @relation(fields: [assessmentId], references: [id])
+  answers         AttemptAnswer[]
+
+  @@index([userId])
+  @@map("assessment_attempts")
+}
+
+model AttemptAnswer {
+  id             String             @id @default(uuid()) @db.Uuid
+  attemptId      String             @map("attempt_id") @db.Uuid
+  questionId     String             @map("question_id") @db.Uuid
+  selectedAnswer String?            @map("selected_answer")
+  isCorrect      Boolean            @default(false) @map("is_correct")
+  marksEarned    Decimal            @default(0) @map("marks_earned") @db.Decimal(4, 2)
+  attempt        AssessmentAttempt  @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  question       AssessmentQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([attemptId])
+  @@index([questionId])
+  @@map("attempt_answers")
+}
+
 model AssessmentResult {
-  id             String     @id @default(uuid()) @db.Uuid
-  userId         String     @map("user_id") @db.Uuid
-  assessmentId   String     @map("assessment_id") @db.Uuid
-  technicalScore Decimal?   @map("technical_score") @db.Decimal(5, 2)
-  aptitudeScore  Decimal?   @map("aptitude_score") @db.Decimal(5, 2)
-  softSkillScore Decimal?   @map("soft_skill_score") @db.Decimal(5, 2)
-  overallScore   Decimal    @map("overall_score") @db.Decimal(5, 2)
-  completedAt    DateTime   @default(now()) @map("completed_at") @db.Timestamptz(6)
-  assessment     Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
-  user           User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id             String      @id @default(uuid()) @db.Uuid
+  userId         String      @map("user_id") @db.Uuid
+  assessmentId   String?     @map("assessment_id") @db.Uuid
+  technicalScore Decimal?    @map("technical_score") @db.Decimal(5, 2)
+  aptitudeScore  Decimal?    @map("aptitude_score") @db.Decimal(5, 2)
+  softSkillScore Decimal?    @map("soft_skill_score") @db.Decimal(5, 2)
+  overallScore   Decimal     @map("overall_score") @db.Decimal(5, 2)
+  completedAt    DateTime    @default(now()) @map("completed_at") @db.Timestamptz(6)
+  assessment     Assessment? @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  user           User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([assessmentId])
@@ -574,13 +638,27 @@ model Collaboration {
 }
 
 model CareerRole {
-  id          String            @id @default(uuid()) @db.Uuid
-  title       String            @unique
-  description String?
-  domain      String?
-  createdAt   DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
-  skills      CareerRoleSkill[]
+  id                   String            @id @default(uuid()) @db.Uuid
+  title                String            @unique
+  description          String?
+  domain               String?
+  courses              Json?
+  departments          Json?
+  isCrossDisciplinary  Boolean           @default(false) @map("is_cross_disciplinary")
+  isActive             Boolean           @default(true) @map("is_active")
+  certifications       Json?
+  toolsAndTechnologies Json?             @map("tools_and_technologies")
+  experienceLevel      String?           @map("experience_level")
+  educationRequirements String?          @map("education_requirements")
+  salaryRange          String?           @map("salary_range")
+  roadmapTemplate      Json?             @map("roadmap_template")
+  createdAt            DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime          @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  skills               CareerRoleSkill[]
 
+  @@index([domain])
+  @@index([isCrossDisciplinary])
+  @@index([isActive])
   @@map("career_roles")
 }
 

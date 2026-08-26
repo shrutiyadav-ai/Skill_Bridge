@@ -152,14 +152,27 @@ export function calculateSkillMatch(
 }
 
 /**
- * Calculates Career Readiness for a target role roadmap
+ * Calculates Career Readiness and generates a tailored step-by-step preparation roadmap based on actual skill gaps.
  */
 export function calculateCareerReadiness(
   studentSkills: UserSkillItem[],
-  roleRequirements: SkillRequirement[]
+  roleRequirements: SkillRequirement[],
+  roleMeta?: {
+    roleTitle?: string;
+    certifications?: string[];
+    toolsAndTechnologies?: string[];
+    domain?: string;
+  }
 ): {
   readinessPercentage: number;
-  roadmapSteps: { step: number; title: string; description: string; type: "LEARN" | "PROJECT" | "APPLY"; skillName?: string }[];
+  roadmapSteps: {
+    step: number;
+    title: string;
+    description: string;
+    type: "LEARN" | "PROJECT" | "CERTIFICATION" | "APPLY";
+    skillName?: string;
+    status?: "ACTIVE" | "UPCOMING" | "COMPLETED";
+  }[];
   matchResult: MatchResult;
 } {
   const matchResult = calculateSkillMatch(studentSkills, roleRequirements);
@@ -168,39 +181,77 @@ export function calculateCareerReadiness(
     step: number;
     title: string;
     description: string;
-    type: "LEARN" | "PROJECT" | "APPLY";
+    type: "LEARN" | "PROJECT" | "CERTIFICATION" | "APPLY";
     skillName?: string;
+    status?: "ACTIVE" | "UPCOMING" | "COMPLETED";
   }[] = [];
 
   let stepNum = 1;
 
-  // Step 1: Address high priority gaps
-  matchResult.priorityGaps.slice(0, 3).forEach((gap) => {
-    roadmapSteps.push({
-      step: stepNum++,
-      title: `Master ${gap.skillName}`,
-      description: `Bridge the ${gap.gap}% proficiency gap through structured courses and practice questions.`,
-      type: "LEARN",
-      skillName: gap.skillName,
+  // 1. Critical & Developing Skill Gaps (Ordered by largest gap)
+  if (matchResult.priorityGaps.length > 0) {
+    matchResult.priorityGaps.slice(0, 3).forEach((gap, idx) => {
+      roadmapSteps.push({
+        step: stepNum++,
+        title: `Bridge Competency Gap: ${gap.skillName}`,
+        description: `Your current level is ${gap.currentLevel}% vs required benchmark of ${gap.requiredLevel}% (Deficit: -${gap.gap}%). Complete practice modules and focused technical assessments to close this gap.`,
+        type: "LEARN",
+        skillName: gap.skillName,
+        status: idx === 0 ? "ACTIVE" : "UPCOMING",
+      });
     });
-  });
-
-  // Step 2: Build a capstone project
-  if (matchResult.strongSkills.length > 0 || matchResult.partialSkills.length > 0) {
+  } else {
     roadmapSteps.push({
       step: stepNum++,
-      title: `Build a Capstone Portfolio Project`,
-      description: `Combine your skills in practical implementation with version control and documentation.`,
-      type: "PROJECT",
+      title: "Core Competency Mastery",
+      description: "You have verified proficiency meeting all baseline competency benchmarks for this role!",
+      type: "LEARN",
+      status: "COMPLETED",
     });
   }
 
-  // Step 3: Apply for targeted internships
+  // 2. Tool & Framework Hands-on Application
+  if (roleMeta?.toolsAndTechnologies && roleMeta.toolsAndTechnologies.length > 0) {
+    const toolsStr = roleMeta.toolsAndTechnologies.slice(0, 4).join(", ");
+    roadmapSteps.push({
+      step: stepNum++,
+      title: `Hands-on Toolchain Mastery (${toolsStr})`,
+      description: `Gain practical fluency in core industry tools: ${toolsStr}. Build workflows utilizing standard production patterns.`,
+      type: "PROJECT",
+      status: "UPCOMING",
+    });
+  }
+
+  // 3. Recommended Industry Certification
+  if (roleMeta?.certifications && roleMeta.certifications.length > 0) {
+    const cert = roleMeta.certifications[0];
+    roadmapSteps.push({
+      step: stepNum++,
+      title: `Earn Industry Credential: ${cert}`,
+      description: `Validate your expertise with recognized benchmark credentials such as ${cert} to stand out to campus recruiters.`,
+      type: "CERTIFICATION",
+      status: "UPCOMING",
+    });
+  }
+
+  // 4. Portfolio Capstone Project
   roadmapSteps.push({
     step: stepNum++,
-    title: `Apply to Matched Opportunities`,
-    description: `Target verified openings where your compatibility score exceeds 75%.`,
+    title: `Build a Verified ${roleMeta?.roleTitle || "Target Role"} Capstone Project`,
+    description: `Develop an end-to-end production portfolio project demonstrating ${
+      matchResult.strongSkills.slice(0, 2).join(" & ") || "domain competencies"
+    } with comprehensive documentation and version control.`,
+    type: "PROJECT",
+    status: "UPCOMING",
+  });
+
+  // 5. Matched Internship & Job Applications
+  roadmapSteps.push({
+    step: stepNum++,
+    title: `Apply to Matched ${roleMeta?.roleTitle || "Career"} Opportunities`,
+    description: `Target high-affinity internship and full-time placement openings where your compatibility index exceeds 75%.`,
     type: "APPLY",
+    status: "UPCOMING",
   });
 
   return {
