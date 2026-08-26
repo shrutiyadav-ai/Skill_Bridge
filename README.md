@@ -12,9 +12,9 @@
 [![NextAuth.js](https://img.shields.io/badge/NextAuth.js-v4-purple?style=flat-square&logo=auth0)](https://next-auth.js.org/)
 [![Google Gemini](https://img.shields.io/badge/Google_Gemini-AI_Assistant-8E75C2?style=flat-square&logo=google)](https://ai.google.dev/)
 
-**An end-to-end platform bridging the gap between academic curricula and industry requirements through skill assessments, weighted compatibility matching, personalized career roadmaps, and multi-stakeholder collaboration.**
+**An end-to-end enterprise platform bridging the gap between academic curricula and industry requirements through course-driven skill assessments, database-backed career benchmarks, deterministic gap diagnostics, personalized preparation roadmaps, and multi-stakeholder collaboration.**
 
-[Explore Features](#-core-features) • [Architecture](#-system-architecture) • [Getting Started](#-quick-start) • [Database Schema](#-database-architecture) • [Demo Accounts](#-seeded-demo-accounts)
+[Explore Features](#-core-features) • [Course-Driven Engines](#-course-driven-engines--benchmarks) • [Architecture](#-system-architecture) • [Getting Started](#-quick-start) • [Database Schema](#-database-architecture) • [Demo Accounts](#-seeded-demo-accounts)
 
 </div>
 
@@ -39,10 +39,11 @@ Traditional higher education often produces a significant mismatch between acade
 └───────────┘    └───────────┘           └───────────┘    └───────────┘
       │                │                       │                │
       ▼                ▼                       ▼                ▼
- • Assessments    • Job/Intern Postings   • Cohort Readiness• Research & Grants
- • Skill Vectors  • Vector Match Engine   • Demand Gaps     • Consultancies
- • Career Paths   • Candidate CRM         • TPO Management  • FDP Programs
- • Portfolios     • Verification Docs     • MoU Tracking    • Mentorship
+ • Course-Based   • Job/Intern Postings   • Cohort Readiness• Research & Grants
+   Assessments    • Vector Match Engine   • Demand Gaps     • Consultancies
+ • Dynamic Roles  • Candidate CRM         • TPO Management  • FDP Programs
+ • Gap Diagnostic • Verification Docs     • MoU Tracking    • Mentorship
+ • Smart Roadmaps • Multi-discipline Hire
 ```
 
 ---
@@ -50,9 +51,11 @@ Traditional higher education often produces a significant mismatch between acade
 ## 🌟 Core Features
 
 ### 👨‍🎓 1. Student Portal
-- **Standardized Skill Assessment**: Domain, technical, and analytical assessments generating verified capability vectors (0–100%).
-- **Competency Matrix & Gap Diagnostic**: Weighted vector matching against target industry roles (e.g., *Machine Learning Engineer*, *Full-Stack Developer*, *Cloud Architect*).
-- **Personalized 5-Step Career Roadmap**: Sequential milestones with AI-recommended courses, projects, and interview preparation tasks.
+- **Course-Driven Skill Assessment**: Automatically configured according to the student's registered Course & Department (e.g. B.Tech CSE, B.Tech AI/ML, B.Com Finance, Mechanical, Civil, BCA).
+- **Dynamic Question Bank & Attempt History**: Database-backed questions with randomized selection, difficulty tracking, attempt progression audits, and question-by-question academic explanations.
+- **Dynamic Industry Benchmarks**: Real-time evaluation against 35+ database-managed career roles with required skill proficiencies, toolchains, and recommended certifications.
+- **Deterministic Gap Engine**: Computes exact capability deficits against target career benchmarks.
+- **Personalized Milestone Roadmap**: Dynamically generated preparation pipeline targeting specific identified skill gaps and practical portfolio capstones.
 - **Unified Profile & Digital Portfolio**: Multi-section profile (Education, Experience, Projects, Certifications, Achievements) with public portfolio links and resume upload.
 - **Application Tracker**: Real-time status tracking (`Applied`, `Under Review`, `Shortlisted`, `Interview`, `Selected`).
 
@@ -75,6 +78,32 @@ Traditional higher education often produces a significant mismatch between acade
 
 ---
 
+## 🎯 Course-Driven Engines & Benchmarks
+
+### 1. Automated Academic Assessment Resolution
+The assessment system completely removes manual career picking. The student's registered degree and department dynamically dictate covered subjects and evaluated competencies:
+- **B.Tech CSE / IT / BCA / B.Sc CS**: Programming, Data Structures & Algorithms, Database Systems (SQL), Operating Systems, Computer Networks, Software Engineering.
+- **B.Tech AI/ML & Data Science**: Python for Data Science, Mathematics & Statistics for ML, Machine Learning Models, Deep Learning & Neural Networks, Data Preprocessing.
+- **B.Com / Accounting & Finance**: Financial Accounting, Corporate Financial Management, Taxation (Direct & GST), Managerial Economics, Financial Analysis & Ratio Diagnostics.
+- **Core Engineering (Mechanical, Civil, ECE)**: CAD/CAM, Thermodynamics, Structural Engineering, Embedded Systems, IoT.
+
+### 2. Multi-Discipline Dynamic Career Catalog (35+ Database-Driven Roles)
+Roles and benchmarks are stored in PostgreSQL and filtered strictly by academic eligibility:
+```
+B.Tech CSE/IT       → Software Engineer, Full Stack, Backend, Frontend, Cloud, DevOps, DBA, QA...
+B.Tech AI/ML        → AI Engineer, ML Engineer, Deep Learning, Data Scientist, MLOps, GenAI...
+B.Com / Finance     → Accountant, Financial Analyst, Tax Consultant, Audit Associate, Investment Analyst...
+BBA / Management    → Marketing Executive, Digital Marketing, HR Executive, Business Analyst, Product Manager...
+Cross-Disciplinary  → Data Analyst, Business Analyst, Product Manager, Cybersecurity Analyst...
+```
+
+### 3. Server-Side Security & Attempt Auditing
+- **Zero Answer Leakage**: Answer keys and explanations are omitted from the client before test submission.
+- **Adaptive Difficulty**: Question difficulty adjusts based on previous attempt benchmarks (Foundational vs Balanced vs Advanced).
+- **Persistent Attempt Records**: Every assessment attempt stores duration, accuracy, overall score, category breakdown, and question audits in `AssessmentAttempt` and `AttemptAnswer`.
+
+---
+
 ## 🛠️ Technology Stack
 
 | Layer | Technologies Used |
@@ -93,7 +122,7 @@ Traditional higher education often produces a significant mismatch between acade
 
 ## 🗄️ Database Architecture
 
-The relational database is deployed on **Supabase PostgreSQL** and managed through **Prisma ORM**:
+The relational schema is deployed on **Supabase PostgreSQL** and managed through **Prisma ORM**:
 
 ```
                        ┌──────────────┐
@@ -110,18 +139,16 @@ The relational database is deployed on **Supabase PostgreSQL** and managed throu
        ├─ Experience  ├─ Collaborations                ├─ ResearchProjects
        ├─ Projects    └─ Mentorships                   └─ Patents
        ├─ Certifications
-       └─ Applications
+       ├─ Applications
+       ├─ AssessmentAttempts ──▶ AttemptAnswers
+       └─ UserSkills ──────────▶ SkillScores
 ```
 
-### Core Models:
-- **`User`**: Base authentication, roles (`STUDENT`, `INDUSTRY`, `INSTITUTION`, `ACADEMICIAN`), profile avatars, and documents.
-- **`StudentProfile`**: Course, department, semester, CGPA, career goals, work mode preferences, social links, resume URL.
-- **`IndustryProfile`**: Company overview, hiring roles, preferred skills, locations, tech stack, verification records.
-- **`InstitutionProfile`**: Accreditation, student/faculty counts, programs, placement officer contacts.
-- **`AcademicianProfile`**: Designation, specialization, experience, research interests, consultancy availability.
-- **`Opportunity`**: Type (`JOB`, `INTERNSHIP`, `FDP`, `RESEARCH`), stipend/salary, eligibility, deadline, status.
-- **`UserSkill` & `SkillScore`**: Verified student skill capability vectors.
-- **`Application`**: Relational junction connecting students to posted opportunities.
+### Key Models:
+- **`CareerRole` & `CareerRoleSkill`**: Database-backed role catalog with course/department associations, required skills, benchmark levels, recommended tools, and certifications.
+- **`AssessmentQuestion`**: Course- and department-tagged question bank with difficulty tiers, options, answer keys, marks, and explanations.
+- **`AssessmentAttempt` & `AttemptAnswer`**: Complete attempt history, category scores, and question audits.
+- **`UserSkill` & `SkillScore`**: Verified student capability vectors populated automatically upon assessment completion.
 
 ---
 
@@ -144,10 +171,10 @@ npm install
 ```
 
 ### 4. Configure Environment Variables
-Create a `.env` file in the project root (or copy `.env.example`):
+Create a `.env` file in the project root:
 
 ```env
-# Supabase PostgreSQL (Session/Transaction pooler + Direct connection)
+# Supabase PostgreSQL (Pooler + Direct)
 DATABASE_URL="postgresql://postgres.[PROJECT_REF]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:6543/postgres?pgbouncer=true"
 DIRECT_URL="postgresql://postgres.[PROJECT_REF]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:5432/postgres"
 
@@ -164,13 +191,16 @@ SUPABASE_SERVICE_ROLE_KEY="your_supabase_service_role_key"
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
 ```
 
-### 5. Push Database Schema & Generate Client
+### 5. Push Database Schema & Seed Data
 ```bash
 # Push Prisma schema to your Supabase PostgreSQL instance
 npx prisma db push
 
 # Generate Prisma Client
 npx prisma generate
+
+# Seed complete demo data (users, dynamic questions, 35+ career roles & benchmarks)
+npx tsx prisma/seed.ts
 ```
 
 ### 6. Run the Development Server
@@ -185,12 +215,14 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 You can test the application using pre-configured demo credentials or register a new user:
 
-| Role | Email | Password | Dashboard Route |
-| :--- | :--- | :--- | :--- |
-| **Student** | `aditya.sharma@iitd.ac.in` | `SkillBridge@2024` | `/student/dashboard` |
-| **Industry** | `hr@flipkart.com` | `SkillBridge@2024` | `/industry/dashboard` |
-| **Institution** | `admin@iitdelhi.ac.in` | `SkillBridge@2024` | `/institution/dashboard` |
-| **Academician** | `dr.raghavan@iitd.ac.in` | `SkillBridge@2024` | `/academician/dashboard` |
+| Persona | Discipline | Email | Password | Dashboard Route |
+| :--- | :--- | :--- | :--- | :--- |
+| **Student** | B.Tech CSE | `aditya.sharma@iitd.ac.in` | `SkillBridge@2024` | `/student/dashboard` |
+| **Student** | B.Tech AI/ML | `priya.patel@nitt.ac.in` | `SkillBridge@2024` | `/student/dashboard` |
+| **Student** | B.Com Finance | `rohit.verma@srcc.du.ac.in` | `SkillBridge@2024` | `/student/dashboard` |
+| **Industry** | Corporate Recruiter | `hr@flipkart.com` | `SkillBridge@2024` | `/industry/dashboard` |
+| **Institution** | University TPO | `admin@iitdelhi.ac.in` | `SkillBridge@2024` | `/institution/dashboard` |
+| **Academician** | Professor / Faculty | `dr.raghavan@iitd.ac.in` | `SkillBridge@2024` | `/academician/dashboard` |
 
 > 💡 **Tip**: Use the **Switch Role** dropdown in the top navigation bar to quickly switch between demo personas with zero logout friction.
 
@@ -201,7 +233,10 @@ You can test the application using pre-configured demo credentials or register a
 ```
 Skill_Bridge/
 ├── prisma/
-│   └── schema.prisma              # Comprehensive Prisma schema (16 models, 8 enums)
+│   ├── schema.prisma              # Comprehensive Prisma schema (20+ models & relations)
+│   ├── seed.ts                    # Master database seeder
+│   ├── seed-questions.ts          # Multi-discipline academic question bank
+│   └── seed-career-roles.ts       # 35+ career roles with industry benchmarks
 ├── src/
 │   ├── app/
 │   │   ├── (auth)/                # Login & Multi-Role Dynamic Registration
@@ -211,7 +246,12 @@ Skill_Bridge/
 │   │   │   ├── institution/       # Analytics, Readiness, Demand Gaps, Profile
 │   │   │   ├── academician/       # Faculty Portal, Research Grants, Profile
 │   │   │   └── profile/           # Unified Dynamic Profile Routing
-│   │   ├── api/                   # REST Endpoints (Auth, Profile, Matching, Upload)
+│   │   ├── api/                   # REST Endpoints (Auth, Assessment, Career, Matching)
+│   │   │   ├── student/
+│   │   │   │   ├── assessment/    # Profile, Start Assessment, Scoring Engine
+│   │   │   │   └── career-roles/  # Dynamic Course-Filtered Roles API
+│   │   │   └── admin/
+│   │   │       └── career-roles/  # Admin Role Management API
 │   │   ├── opportunities/         # Public Opportunities Marketplace & Detail View
 │   │   ├── layout.tsx             # Root Layout with ThemeProvider & Anti-Flash
 │   │   └── page.tsx               # Enterprise Landing Page
@@ -222,8 +262,9 @@ Skill_Bridge/
 │   │   └── ui/                    # Button, Card, Badge, EmptyState, ThemeToggle
 │   ├── lib/
 │   │   ├── academic-data.ts       # 35+ UG/PG/Diploma Degree Taxonomy & Departments
+│   │   ├── course-competencies.ts # Academic Competency Resolution Engine
 │   │   ├── auth.ts                # NextAuth Configuration & Password Verifier
-│   │   ├── matching.ts            # Deterministic Weighted Skill Matching Engine
+│   │   ├── matching.ts            # Deterministic Weighted Skill Matching & Roadmap Engine
 │   │   ├── prisma.ts              # Global Prisma Client Instance
 │   │   ├── supabase.ts            # Supabase Storage Client & Upload Handlers
 │   │   └── utils.ts               # Formatting, Badges, Class Merging
@@ -247,9 +288,9 @@ SkillBridge features a complete, responsive Light & Dark theme system:
 
 ## 🔒 Security & Data Integrity
 
-- **Session Ownership Validation**: All profile and sub-record APIs (`PUT`, `DELETE`, `POST`) enforce server-side user ID verification from authenticated JWT sessions.
+- **Session Ownership Validation**: All profile, assessment, and career APIs enforce server-side user ID verification from authenticated JWT sessions.
+- **Assessment Security**: Answer keys and explanations are validated strictly server-side and never leaked in question payload responses.
 - **MIME & Size Enforced Uploads**: Files uploaded to Supabase Storage are validated for MIME types (`image/*`, `application/pdf`) and capped at 5MB.
-- **Zero Mock Data Leakage**: Newly registered accounts start with isolated database records and real empty states without inheriting seeded demo analytics.
 
 ---
 
