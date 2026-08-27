@@ -22,6 +22,8 @@ import {
   X,
   Compass,
   Handshake,
+  User,
+  Award,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -36,10 +38,13 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   const studentNavItems = [
     { label: "Dashboard", href: "/student/dashboard", icon: LayoutDashboard },
+    { label: "Student Profile", href: "/student/profile", icon: User },
     { label: "Skill Assessment", href: "/student/assessment", icon: ClipboardCheck },
     { label: "Online Courses", href: "/student/courses", icon: BookOpen },
     { label: "Skill Profile & Gaps", href: "/student/skills", icon: TrendingUp },
     { label: "Career & Roadmap", href: "/student/career", icon: Sparkles },
+    { label: "Internships", href: "/student/internships", icon: Briefcase },
+    { label: "Placements", href: "/student/placements", icon: Award },
     { label: "Digital Portfolio", href: "/student/portfolio", icon: FileUser },
     { label: "My Applications", href: "/student/applications", icon: FolderKanban },
     { label: "Explore Opportunities", href: "/opportunities", icon: Compass },

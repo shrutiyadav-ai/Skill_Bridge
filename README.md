@@ -52,15 +52,14 @@ Traditional higher education often produces a significant mismatch between acade
 ## 🌟 Core Features
 
 ### 👨‍🎓 1. Student Portal
-- **Course-Driven Skill Assessment**: Automatically configured according to the student's registered Course & Department (e.g. B.Tech CSE, B.Tech AI/ML, B.Com Finance, Mechanical, Civil, BCA).
-- **Dynamic Question Bank & Attempt History**: Database-backed questions with randomized selection, difficulty tracking, attempt progression audits, and question-by-question academic explanations.
-- **Dynamic Industry Benchmarks**: Real-time evaluation against 35+ database-managed career roles with required skill proficiencies, toolchains, and recommended certifications.
-- **Deterministic Gap Engine**: Computes exact capability deficits against target career benchmarks.
-- **Intelligent Online Course Recommendations**: Prioritized course recommendations from NPTEL, Coursera, SWAYAM, Google, Microsoft, AWS, and edX directly mapped to assessment deficits.
-- **Progress Tracking & Certificate Verification**: Track learning status (`Not Started` → `In Progress` → `Completed`), submit certificate credentials, and automatically elevate verified skills in the Digital Portfolio upon completion.
-- **Personalized Milestone Roadmap**: Dynamically generated preparation pipeline targeting specific identified skill gaps and practical portfolio capstones.
-- **Unified Profile & Digital Portfolio**: Multi-section profile (Education, Experience, Projects, Certifications, Achievements) with public portfolio links and resume upload.
-- **Application Tracker**: Real-time status tracking (`Applied`, `Under Review`, `Shortlisted`, `Interview`, `Selected`).
+- **Dedicated Student Profile Module (`/student/profile`)**: Manage personal credentials, academic history, course/department, career goals, target roles, preferred industries, verified skills, certifications, projects, internships, achievements, and resume uploads with persistent Supabase updates.
+- **Dedicated Online Courses Hub (`/student/courses` & `/student/online-courses`)**: Prioritized course recommendations from NPTEL, Coursera, SWAYAM, Google, Microsoft, AWS, and edX directly mapped to assessment deficits with progress tracking and verified digital portfolio sync.
+- **Dedicated Internships Module (`/student/internships`)**: Discover and apply for paid summer internships, apprenticeships, and industrial training with stipend filters and match scores.
+- **Dedicated Placements Module (`/student/placements`)**: Explore full-time graduate engineering and analyst roles with CTC packages (LPA), eligibility criteria, and campus drive tracking.
+- **Course-Driven Skill Assessment (`/student/assessment`)**: Automatically configured diagnostic test according to the student's registered Course & Department.
+- **Skill Profile & Gap Engine (`/student/skills` & `/student/career`)**: Real-time evaluation against 35+ database-managed career roles with required skill proficiencies and dynamic milestone roadmaps.
+- **Digital Portfolio (`/student/portfolio`)**: Verified public showcase of competencies, projects, certifications, and academic background.
+- **Application Tracker (`/student/applications`)**: Real-time status tracking (`Applied`, `Under Review`, `Shortlisted`, `Interview`, `Selected`).
 
 ### 🏢 2. Industry & Recruiter Portal
 - **Opportunity Marketplace**: Create and manage listings for Full-Time Jobs, Internships, Apprenticeships, Live Projects, and Faculty Fellowships.

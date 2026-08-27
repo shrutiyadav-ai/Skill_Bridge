@@ -36,6 +36,8 @@ import {
   Award,
   ChevronRight,
   GraduationCap,
+  User,
+  FileUser,
 } from "lucide-react";
 
 export default function StudentDashboardPage() {
@@ -240,8 +242,14 @@ export default function StudentDashboardPage() {
           </div>
 
           <div className="flex items-center gap-2.5">
+            <Link href="/student/profile">
+              <Button size="sm" variant="outline" className="gap-1.5 text-xs">
+                <User className="h-4 w-4 text-navy-800 dark:text-blue-400" />
+                My Profile
+              </Button>
+            </Link>
             <Link href="/student/assessment">
-              <Button size="sm" variant="outline" className="gap-1.5">
+              <Button size="sm" variant="outline" className="gap-1.5 text-xs">
                 <ClipboardCheck className="h-4 w-4 text-navy-800 dark:text-blue-400" />
                 {hasSkills ? "Retake Assessment" : "Begin Assessment"}
               </Button>
@@ -249,12 +257,99 @@ export default function StudentDashboardPage() {
             <Button
               size="sm"
               onClick={() => setAssistantOpen(true)}
-              className="gap-1.5 bg-navy-800 dark:bg-blue-600 text-white"
+              className="gap-1.5 bg-navy-800 dark:bg-blue-600 text-white text-xs"
             >
               <Bot className="h-4 w-4 text-amber-400" />
               Career Assistant
             </Button>
           </div>
+        </div>
+
+        {/* 6-Card Student Modules Hub */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          <Link href="/student/profile" className="block group">
+            <Card className="h-full hover:border-navy-300 dark:hover:border-blue-700 transition shadow-2xs">
+              <CardContent className="p-3.5 flex flex-col items-center text-center space-y-1.5">
+                <div className="h-9 w-9 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-navy-800 dark:text-blue-400 flex items-center justify-center">
+                  <User className="h-4 w-4" />
+                </div>
+                <span className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-navy-800 dark:group-hover:text-blue-400 transition">
+                  My Profile
+                </span>
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-1">Edit info & CV</p>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link href="/student/assessment" className="block group">
+            <Card className="h-full hover:border-navy-300 dark:hover:border-blue-700 transition shadow-2xs">
+              <CardContent className="p-3.5 flex flex-col items-center text-center space-y-1.5">
+                <div className="h-9 w-9 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                  <ClipboardCheck className="h-4 w-4" />
+                </div>
+                <span className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-navy-800 dark:group-hover:text-blue-400 transition">
+                  Assessment
+                </span>
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-1">Diagnostic test</p>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link href="/student/courses" className="block group">
+            <Card className="h-full hover:border-navy-300 dark:hover:border-blue-700 transition shadow-2xs">
+              <CardContent className="p-3.5 flex flex-col items-center text-center space-y-1.5">
+                <div className="h-9 w-9 rounded-lg bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 flex items-center justify-center">
+                  <BookOpen className="h-4 w-4" />
+                </div>
+                <span className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-navy-800 dark:group-hover:text-blue-400 transition">
+                  Online Courses
+                </span>
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-1">NPTEL & Coursera</p>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link href="/student/internships" className="block group">
+            <Card className="h-full hover:border-navy-300 dark:hover:border-blue-700 transition shadow-2xs">
+              <CardContent className="p-3.5 flex flex-col items-center text-center space-y-1.5">
+                <div className="h-9 w-9 rounded-lg bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+                  <Briefcase className="h-4 w-4" />
+                </div>
+                <span className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-navy-800 dark:group-hover:text-blue-400 transition">
+                  Internships
+                </span>
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-1">Paid industry roles</p>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link href="/student/placements" className="block group">
+            <Card className="h-full hover:border-navy-300 dark:hover:border-blue-700 transition shadow-2xs">
+              <CardContent className="p-3.5 flex flex-col items-center text-center space-y-1.5">
+                <div className="h-9 w-9 rounded-lg bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center">
+                  <Award className="h-4 w-4" />
+                </div>
+                <span className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-navy-800 dark:group-hover:text-blue-400 transition">
+                  Placements
+                </span>
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-1">Full-time jobs</p>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link href="/student/portfolio" className="block group">
+            <Card className="h-full hover:border-navy-300 dark:hover:border-blue-700 transition shadow-2xs">
+              <CardContent className="p-3.5 flex flex-col items-center text-center space-y-1.5">
+                <div className="h-9 w-9 rounded-lg bg-cyan-50 dark:bg-cyan-950/60 text-cyan-600 dark:text-cyan-400 flex items-center justify-center">
+                  <FileUser className="h-4 w-4" />
+                </div>
+                <span className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-navy-800 dark:group-hover:text-blue-400 transition">
+                  Portfolio
+                </span>
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-1">Public showcase</p>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
 
         {/* 3 Core Metric Cards */}
