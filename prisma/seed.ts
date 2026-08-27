@@ -201,6 +201,10 @@ async function main() {
   const { seedCareerRoles } = await import("./seed-career-roles");
   await seedCareerRoles();
 
+  // 8. Seed Online Courses
+  const { seedOnlineCourses } = await import("./seed-courses");
+  await seedOnlineCourses();
+
   console.log("✅ Seed completed successfully!");
 }
 

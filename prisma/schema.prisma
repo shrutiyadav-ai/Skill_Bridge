@@ -114,6 +114,7 @@ model StudentProfile {
   experiences             Experience[]
   internshipProgress      InternshipProgress[]
   learningRecommendations LearningRecommendation[]
+  courseEnrollments       StudentCourseEnrollment[]
   mentorshipsAsMentee     Mentorship[]             @relation("MenteeRelation")
   projects                Project[]
   institution             InstitutionProfile?      @relation(fields: [institutionId], references: [id])
@@ -707,6 +708,63 @@ model LearningRecommendation {
 
   @@index([studentId])
   @@map("learning_recommendations")
+}
+
+model OnlineCourse {
+  id                     String                    @id @default(uuid()) @db.Uuid
+  title                  String
+  platform               String
+  provider               String?
+  url                    String
+  skillsCovered          Json?                     @map("skills_covered")
+  category               SkillCategory             @default(TECHNICAL)
+  difficulty             DifficultyLevel           @default(BEGINNER)
+  duration               String?
+  certificationAvailable Boolean                   @default(true) @map("certification_available")
+  isFree                 Boolean                   @default(false) @map("is_free")
+  pricingType            String                    @default("FREE") @map("pricing_type")
+  rating                 Decimal?                  @default(4.8) @db.Decimal(3, 2)
+  enrolledCount          Int?                      @default(1250) @map("enrolled_count")
+  description            String?
+  courses                Json?
+  departments            Json?
+  isActive               Boolean                   @default(true) @map("is_active")
+  createdAt              DateTime                  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt              DateTime                  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  enrollments            StudentCourseEnrollment[]
+
+  @@index([platform])
+  @@index([category])
+  @@index([difficulty])
+  @@index([isFree])
+  @@index([isActive])
+  @@map("online_courses")
+}
+
+model StudentCourseEnrollment {
+  id                   String         @id @default(uuid()) @db.Uuid
+  studentId            String         @map("student_id") @db.Uuid
+  courseId             String         @map("course_id") @db.Uuid
+  status               String         @default("NOT_STARTED")
+  priority             String         @default("RECOMMENDED")
+  recommendationReason String?        @map("recommendation_reason")
+  targetSkill          String?        @map("target_skill")
+  progressPercent      Int            @default(0) @map("progress_percent")
+  certificateUrl       String?        @map("certificate_url")
+  certificateDoc       String?        @map("certificate_doc")
+  certificateVerified  Boolean        @default(false) @map("certificate_verified")
+  completedAt          DateTime?      @map("completed_at") @db.Timestamptz(6)
+  createdAt            DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime       @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  student              StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  course               OnlineCourse   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, courseId])
+  @@index([studentId])
+  @@index([courseId])
+  @@index([status])
+  @@index([priority])
+  @@map("student_course_enrollments")
 }
 
 model Notification {

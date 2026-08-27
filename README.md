@@ -12,9 +12,9 @@
 [![NextAuth.js](https://img.shields.io/badge/NextAuth.js-v4-purple?style=flat-square&logo=auth0)](https://next-auth.js.org/)
 [![Google Gemini](https://img.shields.io/badge/Google_Gemini-AI_Assistant-8E75C2?style=flat-square&logo=google)](https://ai.google.dev/)
 
-**An end-to-end enterprise platform bridging the gap between academic curricula and industry requirements through course-driven skill assessments, database-backed career benchmarks, deterministic gap diagnostics, personalized preparation roadmaps, and multi-stakeholder collaboration.**
+**An end-to-end enterprise platform bridging the gap between academic curricula and industry requirements through course-driven skill assessments, database-backed career benchmarks, deterministic gap diagnostics, intelligent online course recommendations, personalized preparation roadmaps, and multi-stakeholder collaboration.**
 
-[Explore Features](#-core-features) • [Course-Driven Engines](#-course-driven-engines--benchmarks) • [Architecture](#-system-architecture) • [Getting Started](#-quick-start) • [Database Schema](#-database-architecture) • [Demo Accounts](#-seeded-demo-accounts)
+[Explore Features](#-core-features) • [Course-Driven Engines](#-course-driven-engines--benchmarks) • [Online Courses Engine](#4-intelligent-online-course-recommendations--portfolio-sync) • [Architecture](#-system-architecture) • [Getting Started](#-quick-start) • [Database Schema](#-database-architecture) • [Demo Accounts](#-seeded-demo-accounts)
 
 </div>
 
@@ -43,7 +43,8 @@ Traditional higher education often produces a significant mismatch between acade
    Assessments    • Vector Match Engine   • Demand Gaps     • Consultancies
  • Dynamic Roles  • Candidate CRM         • TPO Management  • FDP Programs
  • Gap Diagnostic • Verification Docs     • MoU Tracking    • Mentorship
- • Smart Roadmaps • Multi-discipline Hire
+ • Online Courses • Multi-discipline Hire
+ • Smart Roadmaps
 ```
 
 ---
@@ -55,6 +56,8 @@ Traditional higher education often produces a significant mismatch between acade
 - **Dynamic Question Bank & Attempt History**: Database-backed questions with randomized selection, difficulty tracking, attempt progression audits, and question-by-question academic explanations.
 - **Dynamic Industry Benchmarks**: Real-time evaluation against 35+ database-managed career roles with required skill proficiencies, toolchains, and recommended certifications.
 - **Deterministic Gap Engine**: Computes exact capability deficits against target career benchmarks.
+- **Intelligent Online Course Recommendations**: Prioritized course recommendations from NPTEL, Coursera, SWAYAM, Google, Microsoft, AWS, and edX directly mapped to assessment deficits.
+- **Progress Tracking & Certificate Verification**: Track learning status (`Not Started` → `In Progress` → `Completed`), submit certificate credentials, and automatically elevate verified skills in the Digital Portfolio upon completion.
 - **Personalized Milestone Roadmap**: Dynamically generated preparation pipeline targeting specific identified skill gaps and practical portfolio capstones.
 - **Unified Profile & Digital Portfolio**: Multi-section profile (Education, Experience, Projects, Certifications, Achievements) with public portfolio links and resume upload.
 - **Application Tracker**: Real-time status tracking (`Applied`, `Under Review`, `Shortlisted`, `Interview`, `Selected`).
@@ -102,6 +105,15 @@ Cross-Disciplinary  → Data Analyst, Business Analyst, Product Manager, Cyberse
 - **Adaptive Difficulty**: Question difficulty adjusts based on previous attempt benchmarks (Foundational vs Balanced vs Advanced).
 - **Persistent Attempt Records**: Every assessment attempt stores duration, accuracy, overall score, category breakdown, and question audits in `AssessmentAttempt` and `AttemptAnswer`.
 
+### 4. Intelligent Online Course Recommendations & Portfolio Sync
+- **100% Verified Authentic Catalog**: Over 40+ courses from NPTEL (IIT Madras, IIT Kharagpur, IIT Mandi), Coursera (Stanford, DeepLearning.AI, UC San Diego), SWAYAM, Google Cloud, Microsoft Learn, AWS Skill Builder, and Harvard Online.
+- **Priority Tiering**:
+  - 🔥 **High Priority**: Identifies and targets critical deficits (<60% proficiency or missing prerequisite skills).
+  - ⚡ **Recommended**: Targets core benchmark competencies required by the target role and industry.
+  - 📚 **Optional**: Recommends domain elective advancements matching student interests.
+- **Transparent Reasoning**: Explains exactly why each course was suggested (e.g. *"Recommended because Python and Machine Learning were identified as skill gaps in your assessment and are essential for Machine Learning Engineer."*).
+- **Automated Digital Portfolio Sync**: Marking a course as completed and attaching certificate verification links automatically adds the credential to the student's `Certification` records and elevates their verified `UserSkill` score in the database.
+
 ---
 
 ## 🛠️ Technology Stack
@@ -140,15 +152,17 @@ The relational schema is deployed on **Supabase PostgreSQL** and managed through
        ├─ Projects    └─ Mentorships                   └─ Patents
        ├─ Certifications
        ├─ Applications
+       ├─ CourseEnrollments ──▶ OnlineCourses
        ├─ AssessmentAttempts ──▶ AttemptAnswers
        └─ UserSkills ──────────▶ SkillScores
 ```
 
 ### Key Models:
+- **`OnlineCourse` & `StudentCourseEnrollment`**: Database-backed verified course catalog with platforms, providers, URLs, skills covered, pricing tiers, and student enrollment/completion tracking.
 - **`CareerRole` & `CareerRoleSkill`**: Database-backed role catalog with course/department associations, required skills, benchmark levels, recommended tools, and certifications.
 - **`AssessmentQuestion`**: Course- and department-tagged question bank with difficulty tiers, options, answer keys, marks, and explanations.
 - **`AssessmentAttempt` & `AttemptAnswer`**: Complete attempt history, category scores, and question audits.
-- **`UserSkill` & `SkillScore`**: Verified student capability vectors populated automatically upon assessment completion.
+- **`UserSkill` & `SkillScore`**: Verified student capability vectors populated automatically upon assessment completion or verified course certificates.
 
 ---
 
@@ -199,7 +213,7 @@ npx prisma db push
 # Generate Prisma Client
 npx prisma generate
 
-# Seed complete demo data (users, dynamic questions, 35+ career roles & benchmarks)
+# Seed complete demo data (users, dynamic questions, 35+ career roles, 40+ authentic online courses)
 npx tsx prisma/seed.ts
 ```
 
@@ -233,25 +247,34 @@ You can test the application using pre-configured demo credentials or register a
 ```
 Skill_Bridge/
 ├── prisma/
-│   ├── schema.prisma              # Comprehensive Prisma schema (20+ models & relations)
+│   ├── schema.prisma              # Comprehensive Prisma schema (22 models & relations)
 │   ├── seed.ts                    # Master database seeder
 │   ├── seed-questions.ts          # Multi-discipline academic question bank
-│   └── seed-career-roles.ts       # 35+ career roles with industry benchmarks
+│   ├── seed-career-roles.ts       # 35+ career roles with industry benchmarks
+│   └── seed-courses.ts            # 40+ authentic online courses (NPTEL, Coursera, etc.)
 ├── src/
 │   ├── app/
 │   │   ├── (auth)/                # Login & Multi-Role Dynamic Registration
 │   │   ├── (dashboard)/
-│   │   │   ├── student/           # Assessment, Skills, Career, Portfolio, Profile
+│   │   │   ├── student/
+│   │   │   │   ├── dashboard/     # Metric cards, Featured Courses, AI Assistant
+│   │   │   │   ├── courses/       # Dedicated Online Courses Hub & Progress Tracker
+│   │   │   │   ├── assessment/    # Course-Driven Assessment & Review
+│   │   │   │   ├── skills/        # Competency Matrix & Gap Diagnostic
+│   │   │   │   ├── career/        # Career Recommendations & Roadmaps
+│   │   │   │   ├── portfolio/     # Digital Portfolio with verified credentials
+│   │   │   │   └── profile/       # Student Academic Profile
 │   │   │   ├── industry/          # Post Opportunity, Candidate Match, Profile
 │   │   │   ├── institution/       # Analytics, Readiness, Demand Gaps, Profile
-│   │   │   ├── academician/       # Faculty Portal, Research Grants, Profile
-│   │   │   └── profile/           # Unified Dynamic Profile Routing
-│   │   ├── api/                   # REST Endpoints (Auth, Assessment, Career, Matching)
+│   │   │   └── academician/       # Faculty Portal, Research Grants, Profile
+│   │   ├── api/                   # REST Endpoints
 │   │   │   ├── student/
-│   │   │   │   ├── assessment/    # Profile, Start Assessment, Scoring Engine
-│   │   │   │   └── career-roles/  # Dynamic Course-Filtered Roles API
+│   │   │   │   ├── assessment/    # Assessment Profile, Start, Scoring Engine
+│   │   │   │   ├── career-roles/  # Dynamic Course-Filtered Roles API
+│   │   │   │   └── courses/       # Recommendations, Progress Tracking & Complete
 │   │   │   └── admin/
-│   │   │       └── career-roles/  # Admin Role Management API
+│   │   │       ├── career-roles/  # Admin Role Management API
+│   │   │       └── courses/       # Admin Course Catalog API
 │   │   ├── opportunities/         # Public Opportunities Marketplace & Detail View
 │   │   ├── layout.tsx             # Root Layout with ThemeProvider & Anti-Flash
 │   │   └── page.tsx               # Enterprise Landing Page
@@ -263,6 +286,7 @@ Skill_Bridge/
 │   ├── lib/
 │   │   ├── academic-data.ts       # 35+ UG/PG/Diploma Degree Taxonomy & Departments
 │   │   ├── course-competencies.ts # Academic Competency Resolution Engine
+│   │   ├── course-recommendations.ts # Intelligent Course Recommendation Engine
 │   │   ├── auth.ts                # NextAuth Configuration & Password Verifier
 │   │   ├── matching.ts            # Deterministic Weighted Skill Matching & Roadmap Engine
 │   │   ├── prisma.ts              # Global Prisma Client Instance
@@ -290,6 +314,7 @@ SkillBridge features a complete, responsive Light & Dark theme system:
 
 - **Session Ownership Validation**: All profile, assessment, and career APIs enforce server-side user ID verification from authenticated JWT sessions.
 - **Assessment Security**: Answer keys and explanations are validated strictly server-side and never leaked in question payload responses.
+- **Certificate Verification**: Submitting course completion credentials validates issuer integrity and synchronizes verified skill proficiency with the student's digital portfolio.
 - **MIME & Size Enforced Uploads**: Files uploaded to Supabase Storage are validated for MIME types (`image/*`, `application/pdf`) and capped at 5MB.
 
 ---

@@ -39,6 +39,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     { label: "Skill Assessment", href: "/student/assessment", icon: ClipboardCheck },
     { label: "Skill Profile & Gaps", href: "/student/skills", icon: TrendingUp },
     { label: "Career Roadmap", href: "/student/career", icon: Compass },
+    { label: "Online Courses", href: "/student/courses", icon: BookOpen },
     { label: "Explore Opportunities", href: "/opportunities", icon: Briefcase },
     { label: "My Applications", href: "/student/applications", icon: FolderKanban },
     { label: "Digital Portfolio", href: "/student/portfolio", icon: FileUser },
