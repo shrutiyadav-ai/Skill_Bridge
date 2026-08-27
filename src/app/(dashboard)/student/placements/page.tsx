@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { formatDate } from "@/lib/utils";
+import { MOCK_OPPORTUNITIES } from "@/lib/mock-data";
 import {
   Award,
   Search,
@@ -48,10 +49,30 @@ interface PlacementItem {
   compatibilityScore: number;
 }
 
+const DEFAULT_PLACEMENTS: PlacementItem[] = MOCK_OPPORTUNITIES
+  .filter((o) => o.type === "JOB")
+  .map((o) => ({
+    id: o.id,
+    title: o.title,
+    type: o.type,
+    description: o.description,
+    companyName: o.companyName,
+    companyLogo: o.companyLogo,
+    location: o.location,
+    remote: o.remote,
+    duration: o.duration || "Full-Time",
+    salaryMin: o.salaryMin,
+    salaryMax: o.salaryMax,
+    eligibility: o.eligibility,
+    deadline: o.deadline,
+    skills: o.requiredSkills.map((s) => s.skillName),
+    compatibilityScore: o.compatibilityScore || 88,
+  }));
+
 export default function StudentPlacementsPage() {
   const { data: session } = useSession();
-  const [placements, setPlacements] = useState<PlacementItem[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [placements, setPlacements] = useState<PlacementItem[]>(DEFAULT_PLACEMENTS);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Filters
   const [searchQuery, setSearchQuery] = useState("");
@@ -68,30 +89,32 @@ export default function StudentPlacementsPage() {
   const fetchPlacements = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch("/api/opportunities");
+      const res = await fetch("/api/opportunities?type=JOB");
       if (res.ok) {
         const data = await res.json();
         const rawOpps = data.opportunities || data || [];
-        const jobList = rawOpps
-          .filter((o: any) => o.type === "JOB")
-          .map((o: any) => ({
-            id: o.id,
-            title: o.title,
-            type: o.type,
-            description: o.description || "Graduate software engineering and analyst roles with high growth potential.",
-            companyName: o.companyName || o.industry?.companyName || "Corporate Recruiter",
-            companyLogo: o.companyLogo || o.industry?.logoUrl || null,
-            location: o.location || "Bangalore / Hyderabad / Pune",
-            remote: o.remote || false,
-            duration: "Full-Time",
-            salaryMin: o.salaryMin ? Number(o.salaryMin) : 800000,
-            salaryMax: o.salaryMax ? Number(o.salaryMax) : 1400000,
-            eligibility: o.eligibility || "B.Tech/BE/B.Com graduating batch (minimum 7.5 CGPA)",
-            deadline: o.deadline ? o.deadline : new Date(Date.now() + 30 * 86400000).toISOString(),
-            skills: o.requiredSkills?.map((s: any) => s.skillName || s.name) || o.skills || ["Software Engineering"],
-            compatibilityScore: o.compatibilityScore || 88,
-          }));
-        setPlacements(jobList);
+        if (rawOpps.length > 0) {
+          const jobList = rawOpps
+            .filter((o: any) => o.type === "JOB")
+            .map((o: any) => ({
+              id: o.id,
+              title: o.title,
+              type: o.type,
+              description: o.description || "Graduate software engineering and analyst roles with high growth potential.",
+              companyName: o.companyName || o.industry?.companyName || "Corporate Recruiter",
+              companyLogo: o.companyLogo || o.industry?.logoUrl || null,
+              location: o.location || "Bangalore / Hyderabad / Pune",
+              remote: o.remote || false,
+              duration: "Full-Time",
+              salaryMin: o.salaryMin ? Number(o.salaryMin) : 800000,
+              salaryMax: o.salaryMax ? Number(o.salaryMax) : 1400000,
+              eligibility: o.eligibility || "B.Tech/BE/B.Com graduating batch (minimum 7.5 CGPA)",
+              deadline: o.deadline ? o.deadline : new Date(Date.now() + 30 * 86400000).toISOString(),
+              skills: Array.isArray(o.skills) ? o.skills : o.requiredSkills?.map((s: any) => s.skillName || s.name) || ["Software Engineering"],
+              compatibilityScore: o.compatibilityScore || 88,
+            }));
+          setPlacements(jobList);
+        }
       }
     } catch (err) {
       console.error("Error fetching placements:", err);

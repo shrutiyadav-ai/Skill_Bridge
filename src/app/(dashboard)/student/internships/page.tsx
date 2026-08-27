@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { formatDate } from "@/lib/utils";
+import { MOCK_OPPORTUNITIES } from "@/lib/mock-data";
 import {
   Briefcase,
   Search,
@@ -46,10 +47,29 @@ interface InternshipItem {
   compatibilityScore: number;
 }
 
+const DEFAULT_INTERNSHIPS: InternshipItem[] = MOCK_OPPORTUNITIES
+  .filter((o) => o.type === "INTERNSHIP" || o.type === "APPRENTICESHIP")
+  .map((o) => ({
+    id: o.id,
+    title: o.title,
+    type: o.type,
+    description: o.description,
+    companyName: o.companyName,
+    companyLogo: o.companyLogo,
+    location: o.location,
+    remote: o.remote,
+    duration: o.duration,
+    stipend: o.stipend,
+    eligibility: o.eligibility,
+    deadline: o.deadline,
+    skills: o.requiredSkills.map((s) => s.skillName),
+    compatibilityScore: o.compatibilityScore || 85,
+  }));
+
 export default function StudentInternshipsPage() {
   const { data: session } = useSession();
-  const [internships, setInternships] = useState<InternshipItem[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [internships, setInternships] = useState<InternshipItem[]>(DEFAULT_INTERNSHIPS);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Filters
   const [searchQuery, setSearchQuery] = useState("");
@@ -66,29 +86,31 @@ export default function StudentInternshipsPage() {
   const fetchInternships = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch("/api/opportunities");
+      const res = await fetch("/api/opportunities?type=INTERNSHIP");
       if (res.ok) {
         const data = await res.json();
         const rawOpps = data.opportunities || data || [];
-        const internshipList = rawOpps
-          .filter((o: any) => o.type === "INTERNSHIP" || o.type === "APPRENTICESHIP")
-          .map((o: any) => ({
-            id: o.id,
-            title: o.title,
-            type: o.type,
-            description: o.description || "Industry internship offering practical hands-on engineering experience.",
-            companyName: o.companyName || o.industry?.companyName || "Industry Partner",
-            companyLogo: o.companyLogo || o.industry?.logoUrl || null,
-            location: o.location || "Bangalore",
-            remote: o.remote || false,
-            duration: o.duration || "3-6 months",
-            stipend: o.stipend ? Number(o.stipend) : 35000,
-            eligibility: o.eligibility || "B.Tech/B.Com/Degree students, pre-final or final year",
-            deadline: o.deadline ? o.deadline : new Date(Date.now() + 25 * 86400000).toISOString(),
-            skills: o.requiredSkills?.map((s: any) => s.skillName || s.name) || o.skills || ["Problem Solving"],
-            compatibilityScore: o.compatibilityScore || 85,
-          }));
-        setInternships(internshipList);
+        if (rawOpps.length > 0) {
+          const internshipList = rawOpps
+            .filter((o: any) => o.type === "INTERNSHIP" || o.type === "APPRENTICESHIP")
+            .map((o: any) => ({
+              id: o.id,
+              title: o.title,
+              type: o.type,
+              description: o.description || "Industry internship offering practical hands-on engineering experience.",
+              companyName: o.companyName || o.industry?.companyName || "Industry Partner",
+              companyLogo: o.companyLogo || o.industry?.logoUrl || null,
+              location: o.location || "Bangalore",
+              remote: o.remote || false,
+              duration: o.duration || "3-6 months",
+              stipend: o.stipend ? Number(o.stipend) : 35000,
+              eligibility: o.eligibility || "B.Tech/B.Com/Degree students, pre-final or final year",
+              deadline: o.deadline ? o.deadline : new Date(Date.now() + 25 * 86400000).toISOString(),
+              skills: Array.isArray(o.skills) ? o.skills : o.requiredSkills?.map((s: any) => s.skillName || s.name) || ["Problem Solving"],
+              compatibilityScore: o.compatibilityScore || 85,
+            }));
+          setInternships(internshipList);
+        }
       }
     } catch (err) {
       console.error("Error fetching internships:", err);
