@@ -21,6 +21,7 @@ import {
   BarChart3,
   X,
   Compass,
+  Handshake,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -35,14 +36,13 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   const studentNavItems = [
     { label: "Dashboard", href: "/student/dashboard", icon: LayoutDashboard },
-    { label: "My Profile", href: "/student/profile", icon: FileUser },
     { label: "Skill Assessment", href: "/student/assessment", icon: ClipboardCheck },
-    { label: "Skill Profile & Gaps", href: "/student/skills", icon: TrendingUp },
-    { label: "Career Roadmap", href: "/student/career", icon: Compass },
     { label: "Online Courses", href: "/student/courses", icon: BookOpen },
-    { label: "Explore Opportunities", href: "/opportunities", icon: Briefcase },
-    { label: "My Applications", href: "/student/applications", icon: FolderKanban },
+    { label: "Skill Profile & Gaps", href: "/student/skills", icon: TrendingUp },
+    { label: "Career & Roadmap", href: "/student/career", icon: Sparkles },
     { label: "Digital Portfolio", href: "/student/portfolio", icon: FileUser },
+    { label: "My Applications", href: "/student/applications", icon: FolderKanban },
+    { label: "Explore Opportunities", href: "/opportunities", icon: Compass },
   ];
 
   const industryNavItems = [
@@ -56,10 +56,10 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   const institutionNavItems = [
     { label: "Analytics Dashboard", href: "/institution/dashboard", icon: BarChart3 },
+    { label: "Student Readiness", href: "/institution/student-readiness", icon: GraduationCap },
+    { label: "Skill Demand Gaps", href: "/institution/skill-demand-gap", icon: TrendingUp },
+    { label: "Industry Partners", href: "/institution/industry-partners", icon: Handshake },
     { label: "Institution Profile", href: "/institution/profile", icon: Building2 },
-    { label: "Student Readiness", href: "/institution/dashboard#readiness", icon: GraduationCap },
-    { label: "Skill Demand Gaps", href: "/institution/dashboard#skill-gaps", icon: TrendingUp },
-    { label: "Industry Partners", href: "/institution/dashboard#collaborations", icon: Building2 },
     { label: "All Opportunities", href: "/opportunities", icon: Compass },
   ];
 

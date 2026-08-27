@@ -69,10 +69,11 @@ Traditional higher education often produces a significant mismatch between acade
 - **Company Branding**: Showcase company culture, tech stack, hiring benefits, and verification badges.
 
 ### 🏛️ 3. Institution Analytics Portal
-- **Cohort Readiness Analytics**: Macro and departmental placement readiness metrics across all enrolled student batches.
-- **Industry Demand vs. Curriculum Gaps**: Real-time insights highlighting emerging industry skills missing from academic syllabi.
+- **Dedicated Student Readiness Module (`/institution/student-readiness`)**: Real-time batch placement readiness analytics (Ready / Developing / Foundational), department-wise comparison metrics, assessment completion tracking, and searchable/filterable student roster with CSV export.
+- **Dedicated Skill Demand Gap Module (`/institution/skill-demand-gap`)**: Direct labor market diagnostic comparing active corporate hiring requirements against student cohort competency supply, with severity rankings (Critical, Moderate, Balanced), department deficits, and curriculum intervention recommendations.
+- **Dedicated Industry Partners Module (`/institution/industry-partners`)**: Corporate partner directory, active job/internship listings count, demanded tech stacks, recruiter contact details, campus drive invitations, and institutional MoUs.
+- **Macro Analytics Overview (`/institution/dashboard` & `/institution/analytics`)**: Executive analytics overview linking directly to all three specialized modules.
 - **Training & Placement Office (TPO) Hub**: Centralized placement statistics, recruiter contacts, and student verification.
-- **Industry Partnerships & MoUs**: Track active industry collaborations, workshops, and joint programs.
 
 ### 👨‍🏫 4. Academician & Faculty Portal
 - **Faculty Development Programs (FDPs)**: Discover and apply for sponsored upskilling and faculty development programs.

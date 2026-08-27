@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Button } from "@/components/ui/Button";
@@ -18,6 +19,10 @@ import {
   CheckCircle2,
   AlertCircle,
   FileSpreadsheet,
+  ArrowRight,
+  ChevronRight,
+  Flame,
+  Briefcase,
 } from "lucide-react";
 
 export default function InstitutionDashboardPage() {
@@ -78,11 +83,99 @@ export default function InstitutionDashboardPage() {
           <Button
             size="sm"
             onClick={handleExportReport}
-            className="gap-1.5 self-start md:self-auto bg-navy-800 dark:bg-blue-600 text-white"
+            className="gap-1.5 self-start md:self-auto bg-navy-800 dark:bg-blue-600 text-white text-xs"
           >
             <Download className="h-4 w-4" />
             {downloadSuccess ? "Report Exported!" : "Export Institutional Report"}
           </Button>
+        </div>
+
+        {/* 3 Core Module Jump Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {/* Card 1: Student Readiness */}
+          <Link href="/institution/student-readiness" className="block group">
+            <Card className="h-full hover:border-navy-300 dark:hover:border-blue-700 transition shadow-xs">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <div className="h-10 w-10 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                    <GraduationCap className="h-5 w-5" />
+                  </div>
+                  <Badge variant="success" className="text-[10px]">
+                    76% Placement Ready
+                  </Badge>
+                </div>
+                <CardTitle className="text-base font-bold mt-2 text-slate-900 dark:text-white group-hover:text-navy-800 dark:group-hover:text-blue-400 transition">
+                  Student Readiness Module
+                </CardTitle>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  Detailed student vectors, assessment rates, and department-wise readiness metrics.
+                </p>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <div className="flex items-center justify-between text-xs font-semibold text-navy-800 dark:text-blue-400 mt-1">
+                  <span>Open Student Readiness</span>
+                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+
+          {/* Card 2: Skill Demand Gap */}
+          <Link href="/institution/skill-demand-gap" className="block group">
+            <Card className="h-full hover:border-navy-300 dark:hover:border-blue-700 transition shadow-xs">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <div className="h-10 w-10 rounded-lg bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center">
+                    <TrendingUp className="h-5 w-5" />
+                  </div>
+                  <Badge variant="danger" className="text-[10px] gap-1">
+                    <Flame className="h-3 w-3" />
+                    Action Required
+                  </Badge>
+                </div>
+                <CardTitle className="text-base font-bold mt-2 text-slate-900 dark:text-white group-hover:text-navy-800 dark:group-hover:text-blue-400 transition">
+                  Skill Demand Gap Module
+                </CardTitle>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  Compare real industry hiring requirements vs. student cohort capabilities.
+                </p>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <div className="flex items-center justify-between text-xs font-semibold text-navy-800 dark:text-blue-400 mt-1">
+                  <span>Open Skill Demand Gaps</span>
+                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+
+          {/* Card 3: Industry Partners */}
+          <Link href="/institution/industry-partners" className="block group">
+            <Card className="h-full hover:border-navy-300 dark:hover:border-blue-700 transition shadow-xs">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <div className="h-10 w-10 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-navy-800 dark:text-blue-400 flex items-center justify-center">
+                    <Building2 className="h-5 w-5" />
+                  </div>
+                  <Badge variant="primary" className="text-[10px]">
+                    MoU Network
+                  </Badge>
+                </div>
+                <CardTitle className="text-base font-bold mt-2 text-slate-900 dark:text-white group-hover:text-navy-800 dark:group-hover:text-blue-400 transition">
+                  Industry Partners Module
+                </CardTitle>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  Manage active recruitment partners, placement drives, and institutional MoUs.
+                </p>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <div className="flex items-center justify-between text-xs font-semibold text-navy-800 dark:text-blue-400 mt-1">
+                  <span>Open Industry Partners</span>
+                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
 
         {/* 4 Overview Metric Cards */}
@@ -140,14 +233,19 @@ export default function InstitutionDashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6" id="skill-gaps">
           {/* Identified Curriculum Gaps */}
           <Card>
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
+            <CardHeader className="pb-3 flex flex-row items-center justify-between">
+              <div>
                 <CardTitle>Priority Curriculum & Skill Gaps</CardTitle>
-                <Badge variant="danger">Action Required</Badge>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Competencies where student performance lags industry benchmarks
+                </p>
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Competencies where student cohort performance lags industry hiring benchmarks
-              </p>
+              <Link href="/institution/skill-demand-gap">
+                <Button variant="ghost" size="sm" className="text-xs text-navy-800 dark:text-blue-400 gap-1">
+                  Full Matrix
+                  <ChevronRight className="h-3.5 w-3.5" />
+                </Button>
+              </Link>
             </CardHeader>
             <CardContent className="p-0">
               <div className="overflow-x-auto">
@@ -161,29 +259,22 @@ export default function InstitutionDashboardPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {skillGaps.map((gap) => (
-                      <tr key={gap.skill}>
-                        <td className="font-semibold text-slate-900 dark:text-slate-100">{gap.skill}</td>
+                    {skillGaps.map((g) => (
+                      <tr key={g.skill}>
+                        <td className="font-semibold text-slate-900 dark:text-slate-100">{g.skill}</td>
                         <td>
                           <div className="flex items-center gap-2">
-                            <div className="w-20 bg-slate-100 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
-                              <div
-                                className="bg-rose-600 h-full rounded-full"
-                                style={{ width: `${gap.gapPct}%` }}
-                              />
-                            </div>
+                            <Progress value={g.gapPct} color="rose" className="w-16" />
                             <span className="font-mono text-xs text-rose-600 dark:text-rose-400 font-bold">
-                              {gap.gapPct}%
+                              -{g.gapPct}%
                             </span>
                           </div>
                         </td>
                         <td>
-                          <Badge variant={gap.impact === "High" ? "danger" : "warning"}>
-                            {gap.impact}
-                          </Badge>
+                          <Badge variant={g.impact === "High" ? "danger" : "warning"}>{g.impact}</Badge>
                         </td>
-                        <td className="font-mono text-xs text-slate-600 dark:text-slate-400">
-                          {gap.affectedStudents}
+                        <td className="font-mono text-slate-700 dark:text-slate-300 text-xs">
+                          {g.affectedStudents}
                         </td>
                       </tr>
                     ))}
@@ -193,25 +284,30 @@ export default function InstitutionDashboardPage() {
             </CardContent>
           </Card>
 
-          {/* Industry Demand vs Student Supply */}
+          {/* Industry Demand vs Cohort Supply */}
           <Card>
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <CardTitle>Market Demand vs. Student Supply</CardTitle>
-                <Badge variant="secondary">Quarterly Index</Badge>
+            <CardHeader className="pb-3 flex flex-row items-center justify-between">
+              <div>
+                <CardTitle>Industry Demand vs. Cohort Supply</CardTitle>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Active recruitment demand vs. verified proficiency levels
+                </p>
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Alignment between job opening volume and student competency vectors
-              </p>
+              <Link href="/institution/skill-demand-gap">
+                <Button variant="ghost" size="sm" className="text-xs text-navy-800 dark:text-blue-400 gap-1">
+                  Explore Gaps
+                  <ChevronRight className="h-3.5 w-3.5" />
+                </Button>
+              </Link>
             </CardHeader>
             <CardContent className="p-0">
               <div className="overflow-x-auto">
                 <table className="data-table">
                   <thead>
                     <tr>
-                      <th>Skill Area</th>
-                      <th>Market Demand</th>
-                      <th>Student Supply</th>
+                      <th>Skill</th>
+                      <th>Industry Demand</th>
+                      <th>Cohort Supply</th>
                       <th>Net Balance</th>
                     </tr>
                   </thead>
@@ -219,8 +315,16 @@ export default function InstitutionDashboardPage() {
                     {industryDemandVsSupply.map((item) => (
                       <tr key={item.skill}>
                         <td className="font-semibold text-slate-900 dark:text-slate-100">{item.skill}</td>
-                        <td className="font-mono text-xs text-slate-600 dark:text-slate-400">{item.demand}%</td>
-                        <td className="font-mono text-xs text-slate-600 dark:text-slate-400">{item.supply}%</td>
+                        <td>
+                          <span className="font-mono text-xs font-bold text-slate-900 dark:text-white">
+                            {item.demand}%
+                          </span>
+                        </td>
+                        <td>
+                          <span className="font-mono text-xs font-bold text-slate-900 dark:text-white">
+                            {item.supply}%
+                          </span>
+                        </td>
                         <td>
                           <span
                             className={`font-mono text-xs font-bold ${
@@ -241,48 +345,100 @@ export default function InstitutionDashboardPage() {
           </Card>
         </div>
 
-        {/* Department-wise Readiness & Placement Breakdown */}
+        {/* Department-Wise Placement Readiness */}
         <Card id="readiness">
-          <CardHeader>
-            <CardTitle>Department-Level Assessment & Placement Metrics</CardTitle>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Comparative view of cohort size, evaluation compliance, and career readiness scores
-            </p>
+          <CardHeader className="pb-3 flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Department-Wise Placement Readiness</CardTitle>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Cohort breakdown by academic department
+              </p>
+            </div>
+            <Link href="/institution/student-readiness">
+              <Button variant="ghost" size="sm" className="text-xs text-navy-800 dark:text-blue-400 gap-1">
+                Student Roster
+                <ChevronRight className="h-3.5 w-3.5" />
+              </Button>
+            </Link>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
               <table className="data-table">
                 <thead>
                   <tr>
-                    <th>Department / Program</th>
-                    <th>Total Students</th>
+                    <th>Department</th>
+                    <th>Students</th>
                     <th>Assessed</th>
                     <th>Avg. Readiness</th>
-                    <th>Placed / Selected</th>
+                    <th>Placement Ready</th>
                   </tr>
                 </thead>
                 <tbody>
                   {departmentMetrics.map((dept) => (
                     <tr key={dept.dept}>
                       <td className="font-semibold text-slate-900 dark:text-slate-100">{dept.dept}</td>
-                      <td className="font-mono text-xs text-slate-600 dark:text-slate-400">{dept.students}</td>
-                      <td>
-                        <span className="font-mono text-xs font-semibold text-slate-900 dark:text-slate-100">
-                          {dept.assessed} ({Math.round((dept.assessed / dept.students) * 100)}%)
-                        </span>
-                      </td>
+                      <td className="font-mono text-xs">{dept.students}</td>
+                      <td className="font-mono text-xs">{dept.assessed}</td>
                       <td>
                         <div className="flex items-center gap-2">
-                          <Progress value={dept.readiness} color="emerald" className="w-24" />
-                          <span className="font-mono text-xs font-bold text-slate-800 dark:text-slate-200">
+                          <Progress value={dept.readiness} color="emerald" className="w-20" />
+                          <span className="font-mono text-xs font-bold text-slate-900 dark:text-white">
                             {dept.readiness}%
                           </span>
                         </div>
                       </td>
                       <td>
-                        <span className="font-mono text-xs font-bold text-navy-800 dark:text-blue-400">
+                        <span className="font-mono text-xs text-emerald-600 dark:text-emerald-400 font-bold">
                           {dept.placedPct}%
                         </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Active Industry Collaborations & MoUs */}
+        <Card id="collaborations">
+          <CardHeader className="pb-3 flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Active Industry Collaborations & MoUs</CardTitle>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Corporate partnerships for internships, placements, and live projects
+              </p>
+            </div>
+            <Link href="/institution/industry-partners">
+              <Button variant="ghost" size="sm" className="text-xs text-navy-800 dark:text-blue-400 gap-1">
+                Partner Directory
+                <ChevronRight className="h-3.5 w-3.5" />
+              </Button>
+            </Link>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Corporate Partner</th>
+                    <th>Partnership Type</th>
+                    <th>Department Focus</th>
+                    <th>Students Placed</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {MOCK_COLLABORATIONS.map((c) => (
+                    <tr key={c.id}>
+                      <td className="font-semibold text-slate-900 dark:text-slate-100">{c.companyName}</td>
+                      <td>
+                        <Badge variant="secondary">{c.partnershipType}</Badge>
+                      </td>
+                      <td className="text-slate-600 dark:text-slate-300 text-xs">{c.department}</td>
+                      <td className="font-mono text-xs font-bold">{c.studentsBenefited}</td>
+                      <td>
+                        <Badge variant="success">Active</Badge>
                       </td>
                     </tr>
                   ))}
