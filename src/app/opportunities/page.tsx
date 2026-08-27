@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { Logo } from "@/components/brand/Logo";
 import { MOCK_OPPORTUNITIES, MOCK_STUDENT_SKILLS } from "@/lib/mock-data";
 import { OpportunityItem, OpportunityType } from "@/types";
 import { formatCurrency, formatDate } from "@/lib/utils";
@@ -65,10 +66,8 @@ export default function OpportunitiesMarketplacePage() {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col transition-colors duration-150">
       {/* Top Navbar */}
       <header className="h-16 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xs sticky top-0 z-30 px-4 sm:px-8 flex items-center justify-between transition-colors duration-150">
-        <Link href="/" className="flex items-center gap-2.5">
-          <div className="h-8 w-8 rounded bg-navy-800 dark:bg-blue-600 flex items-center justify-center font-bold text-white text-base shadow-sm">
-            SB
-          </div>
+        <Link href="/" className="flex items-center gap-2.5 group">
+          <Logo size="md" showBorder className="group-hover:scale-105 transition-transform" />
           <span className="font-bold text-slate-900 dark:text-white tracking-tight text-lg">SkillBridge</span>
         </Link>
 

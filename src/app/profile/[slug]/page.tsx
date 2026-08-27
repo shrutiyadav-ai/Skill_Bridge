@@ -14,6 +14,8 @@ import {
   Mail,
 } from "lucide-react";
 
+import { Logo } from "@/components/brand/Logo";
+
 export default function PublicPortfolioPage({ params }: { params: { slug: string } }) {
   const studentName = params.slug === "aditya-sharma" ? "Aditya Sharma" : "Candidate Profile";
 
@@ -22,9 +24,10 @@ export default function PublicPortfolioPage({ params }: { params: { slug: string
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Top bar back navigation */}
         <div className="flex items-center justify-between">
-          <Link href="/" className="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 hover:text-slate-900">
-            <ArrowLeft className="h-4 w-4" />
-            SkillBridge Portal
+          <Link href="/" className="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 hover:text-slate-900 group">
+            <ArrowLeft className="h-4 w-4 group-hover:-translate-x-0.5 transition-transform" />
+            <Logo size="xs" showBorder />
+            <span>SkillBridge Portal</span>
           </Link>
           <Badge variant="success" className="gap-1">
             <ShieldCheck className="h-3 w-3" />

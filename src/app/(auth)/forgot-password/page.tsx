@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { CheckCircle2, ArrowLeft } from "lucide-react";
+import { Logo } from "@/components/brand/Logo";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -17,13 +18,11 @@ export default function ForgotPasswordPage() {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <Link href="/" className="flex items-center justify-center gap-2.5">
-          <div className="h-9 w-9 rounded bg-navy-800 flex items-center justify-center font-bold text-white text-lg shadow-sm">
-            SB
-          </div>
-          <span className="font-bold text-slate-900 tracking-tight text-xl">SkillBridge</span>
+        <Link href="/" className="flex flex-col items-center justify-center gap-2.5 group">
+          <Logo size="lg" showBorder className="group-hover:scale-105 transition-transform shadow-sm" />
+          <span className="font-bold text-slate-900 tracking-tight text-2xl">SkillBridge</span>
         </Link>
-        <h2 className="mt-4 text-center text-2xl font-bold tracking-tight text-slate-900">
+        <h2 className="mt-3 text-center text-xl font-bold tracking-tight text-slate-900">
           Reset your password
         </h2>
         <p className="mt-1 text-center text-xs text-slate-600">

@@ -9,6 +9,7 @@ import { AlertCircle, CheckCircle2, Loader2, Search } from "lucide-react";
 import { ACADEMIC_COURSES, getDepartmentsForCourse } from "@/lib/academic-data";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { getRoleDashboardPath } from "@/lib/auth";
+import { Logo } from "@/components/brand/Logo";
 
 export default function RegisterPage() {
   const [role, setRole] = useState<UserRole>("STUDENT");
@@ -154,13 +155,11 @@ export default function RegisterPage() {
       </div>
 
       <div className="sm:mx-auto sm:w-full sm:max-w-xl">
-        <Link href="/" className="flex items-center justify-center gap-2.5">
-          <div className="h-9 w-9 rounded bg-navy-800 dark:bg-blue-600 flex items-center justify-center font-bold text-white text-lg shadow-sm">
-            SB
-          </div>
-          <span className="font-bold text-slate-900 dark:text-white tracking-tight text-xl">SkillBridge</span>
+        <Link href="/" className="flex flex-col items-center justify-center gap-2.5 group">
+          <Logo size="lg" showBorder className="group-hover:scale-105 transition-transform shadow-sm" />
+          <span className="font-bold text-slate-900 dark:text-white tracking-tight text-2xl">SkillBridge</span>
         </Link>
-        <h2 className="mt-4 text-center text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+        <h2 className="mt-3 text-center text-xl font-bold tracking-tight text-slate-900 dark:text-white">
           Create your account
         </h2>
         <p className="mt-1 text-center text-xs text-slate-600 dark:text-slate-400">

@@ -17,17 +17,17 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
+import { Logo } from "@/components/brand/Logo";
+
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col transition-colors duration-150">
       {/* Top Navbar */}
       <header className="h-16 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xs sticky top-0 z-40 px-4 sm:px-8 flex items-center justify-between transition-colors duration-150">
-        <div className="flex items-center gap-2.5">
-          <div className="h-8 w-8 rounded bg-navy-800 dark:bg-blue-600 flex items-center justify-center font-bold text-white text-base shadow-sm">
-            SB
-          </div>
+        <Link href="/" className="flex items-center gap-2.5 group">
+          <Logo size="md" showBorder className="group-hover:scale-105 transition-transform" />
           <span className="font-bold text-slate-900 dark:text-white tracking-tight text-lg">SkillBridge</span>
-        </div>
+        </Link>
 
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600 dark:text-slate-300">
           <Link href="/opportunities" className="hover:text-navy-900 dark:hover:text-white transition">
@@ -238,6 +238,7 @@ export default function LandingPage() {
       <footer className="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-8 px-4 sm:px-8 text-xs text-slate-500 dark:text-slate-400 transition-colors duration-150">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
+            <Logo size="xs" showBorder />
             <span className="font-bold text-slate-800 dark:text-slate-200">SkillBridge</span>
             <span>— Connecting skills with opportunity.</span>
           </div>

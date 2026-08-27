@@ -26,6 +26,8 @@ import {
   Award,
 } from "lucide-react";
 
+import { Logo } from "@/components/brand/Logo";
+
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
@@ -38,43 +40,41 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   const studentNavItems = [
     { label: "Dashboard", href: "/student/dashboard", icon: LayoutDashboard },
-    { label: "Student Profile", href: "/student/profile", icon: User },
-    { label: "Skill Assessment", href: "/student/assessment", icon: ClipboardCheck },
+    { label: "Skill Vector & Matrix", href: "/student/skills", icon: TrendingUp },
+    { label: "Assessment Engine", href: "/student/assessment", icon: ClipboardCheck },
+    { label: "Career Path & Readiness", href: "/student/career", icon: Compass },
     { label: "Online Courses", href: "/student/courses", icon: BookOpen },
-    { label: "Skill Profile & Gaps", href: "/student/skills", icon: TrendingUp },
-    { label: "Career & Roadmap", href: "/student/career", icon: Sparkles },
     { label: "Internships", href: "/student/internships", icon: Briefcase },
-    { label: "Placements", href: "/student/placements", icon: Award },
-    { label: "Digital Portfolio", href: "/student/portfolio", icon: FileUser },
-    { label: "My Applications", href: "/student/applications", icon: FolderKanban },
-    { label: "Explore Opportunities", href: "/opportunities", icon: Compass },
+    { label: "Placements & Jobs", href: "/student/placements", icon: Award },
+    { label: "Verified Digital Profile", href: "/student/profile", icon: User },
+    { label: "Public Portfolio", href: "/student/portfolio", icon: FileUser },
+    { label: "Applications", href: "/student/applications", icon: FolderKanban },
   ];
 
   const industryNavItems = [
     { label: "Dashboard", href: "/industry/dashboard", icon: LayoutDashboard },
+    { label: "Post Opportunities", href: "/industry/opportunities/new", icon: Briefcase },
+    { label: "Candidate Match Pool", href: "/industry/candidates", icon: Users },
+    { label: "Institutional Partnerships", href: "/academia/collaboration", icon: Handshake },
     { label: "Company Profile", href: "/industry/profile", icon: Building2 },
-    { label: "Post Opportunity", href: "/industry/opportunities/new", icon: Briefcase },
-    { label: "Candidate Matching", href: "/industry/candidates", icon: Users },
-    { label: "Applications", href: "/industry/dashboard", icon: FolderKanban },
-    { label: "Explore Marketplace", href: "/opportunities", icon: Compass },
   ];
 
   const institutionNavItems = [
-    { label: "Analytics Dashboard", href: "/institution/dashboard", icon: BarChart3 },
-    { label: "Student Readiness", href: "/institution/student-readiness", icon: GraduationCap },
-    { label: "Skill Demand Gaps", href: "/institution/skill-demand-gap", icon: TrendingUp },
-    { label: "Industry Partners", href: "/institution/industry-partners", icon: Handshake },
+    { label: "Dashboard", href: "/institution/dashboard", icon: LayoutDashboard },
+    { label: "Student Readiness Index", href: "/institution/student-readiness", icon: GraduationCap },
+    { label: "Skill Demand Gap Diagnostics", href: "/institution/skill-demand-gap", icon: BarChart3 },
+    { label: "Industry Partners & MoUs", href: "/institution/industry-partners", icon: Handshake },
+    { label: "Institutional Analytics", href: "/institution/analytics", icon: TrendingUp },
     { label: "Institution Profile", href: "/institution/profile", icon: Building2 },
-    { label: "All Opportunities", href: "/opportunities", icon: Compass },
   ];
 
   const academicianNavItems = [
-    { label: "Faculty Portal", href: "/academician/dashboard", icon: LayoutDashboard },
-    { label: "Faculty Opportunities", href: "/academia/faculty-opportunities", icon: BookOpen },
-    { label: "Research & Consultancy", href: "/academia/research-consultancy", icon: Network },
-    { label: "Collaboration", href: "/academia/collaboration", icon: Handshake },
-    { label: "Faculty Profile", href: "/academician/profile", icon: FileUser },
-    { label: "All Opportunities", href: "/opportunities", icon: Compass },
+    { label: "Dashboard", href: "/academician/dashboard", icon: LayoutDashboard },
+    { label: "Faculty Opportunities", href: "/academician/faculty-opportunities", icon: Sparkles },
+    { label: "Research & Consultancy", href: "/academician/research-consultancy", icon: BookOpen },
+    { label: "Academia-Industry Collaboration", href: "/academician/collaboration", icon: Network },
+    { label: "Faculty Analytics", href: "/academia/analytics", icon: TrendingUp },
+    { label: "Academician Profile", href: "/academician/profile", icon: User },
   ];
 
   let navItems = studentNavItems;
@@ -99,11 +99,9 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         )}
       >
         {/* Brand Header */}
-        <div className="h-16 px-6 flex items-center justify-between border-b border-slate-800">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="h-8 w-8 rounded bg-navy-600 flex items-center justify-center font-bold text-white text-base shadow-sm">
-              SB
-            </div>
+        <div className="h-16 px-5 flex items-center justify-between border-b border-slate-800">
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <Logo size="md" className="ring-1 ring-slate-700/80 shadow-xs group-hover:scale-105 transition-transform" />
             <div className="flex flex-col">
               <span className="font-bold text-white tracking-tight leading-none text-base">
                 SkillBridge

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { Sparkles, AlertCircle, Loader2 } from "lucide-react";
 import { getRoleDashboardPath } from "@/lib/auth";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { Logo } from "@/components/brand/Logo";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -25,20 +26,18 @@ export default function LoginPage() {
         password: loginPassword.trim(),
       });
 
-      if (!res || res.error || !res.ok) {
-        setErrorMessage("Invalid email or password. Please check your credentials and try again.");
+      if (res?.error) {
+        setErrorMessage("Invalid credentials. Please check your email and password.");
         setIsLoading(false);
         return;
       }
 
-      // Fetch the authenticated session to get the actual database role
       const session = await getSession();
-      const userRole = (session?.user as any)?.role;
-
-      const destination = getRoleDashboardPath(userRole);
-      window.location.href = destination;
+      const role = (session?.user as any)?.role;
+      const dashboardUrl = getRoleDashboardPath(role);
+      window.location.href = dashboardUrl;
     } catch (err: any) {
-      setErrorMessage("An unexpected authentication error occurred. Please try again.");
+      setErrorMessage(err.message || "An unexpected error occurred during sign-in.");
       setIsLoading(false);
     }
   };
@@ -65,13 +64,11 @@ export default function LoginPage() {
       </div>
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <Link href="/" className="flex items-center justify-center gap-2.5">
-          <div className="h-9 w-9 rounded bg-navy-800 dark:bg-blue-600 flex items-center justify-center font-bold text-white text-lg shadow-sm">
-            SB
-          </div>
-          <span className="font-bold text-slate-900 dark:text-white tracking-tight text-xl">SkillBridge</span>
+        <Link href="/" className="flex flex-col items-center justify-center gap-2.5 group">
+          <Logo size="lg" showBorder className="group-hover:scale-105 transition-transform shadow-sm" />
+          <span className="font-bold text-slate-900 dark:text-white tracking-tight text-2xl">SkillBridge</span>
         </Link>
-        <h2 className="mt-4 text-center text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+        <h2 className="mt-3 text-center text-xl font-bold tracking-tight text-slate-900 dark:text-white">
           Sign in to your portal
         </h2>
         <p className="mt-1 text-center text-xs text-slate-600 dark:text-slate-400">
