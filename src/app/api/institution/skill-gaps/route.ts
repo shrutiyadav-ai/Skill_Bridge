@@ -3,6 +3,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: Request) {
   try {
     const session = await getServerSession(authOptions);
@@ -17,7 +19,7 @@ export async function GET(request: Request) {
     // 1. Fetch all core skills from catalog
     const allSkills = await prisma.skill.findMany({
       include: {
-        roleSkills: true,
+        careerRoleSkills: true,
         skillRequirements: true,
         userSkills: true,
       },
@@ -26,15 +28,15 @@ export async function GET(request: Request) {
     // 2. Compute industry demand index & student supply index for each skill
     const skillGapAnalysis = allSkills.map((sk) => {
       // Demand weight based on career roles & industry opportunity listings
-      const roleWeight = sk.roleSkills.reduce(
-        (acc, curr) => acc + Number(curr.requiredLevel),
+      const roleWeight = (sk.careerRoleSkills || []).reduce(
+        (acc: number, curr: any) => acc + Number(curr.requiredLevel),
         0
       );
-      const oppWeight = sk.skillRequirements.reduce(
-        (acc, curr) => acc + Number(curr.requiredLevel),
+      const oppWeight = (sk.skillRequirements || []).reduce(
+        (acc: number, curr: any) => acc + Number(curr.requiredLevel),
         0
       );
-      const totalDemandSignals = sk.roleSkills.length + sk.skillRequirements.length;
+      const totalDemandSignals = (sk.careerRoleSkills?.length || 0) + (sk.skillRequirements?.length || 0);
 
       const demandIndex =
         totalDemandSignals > 0
@@ -49,7 +51,7 @@ export async function GET(request: Request) {
       const supplyIndex =
         validUserSkills.length > 0
           ? Math.round(
-              validUserSkills.reduce((acc, curr) => acc + Number(curr.score), 0) /
+              validUserSkills.reduce((acc: number, curr: any) => acc + Number(curr.score), 0) /
                 validUserSkills.length
             )
           : 30; // Default foundational score if few students verified

@@ -35,16 +35,16 @@ interface PlacementItem {
   id: string;
   title: string;
   type: string;
-  description: string;
+  description: string | null;
   companyName: string;
-  companyLogo: string | null;
-  location: string;
+  companyLogo?: string | null;
+  location: string | null;
   remote: boolean;
-  duration: string;
-  salaryMin: number | null;
-  salaryMax: number | null;
-  eligibility: string;
-  deadline: string;
+  duration: string | null;
+  salaryMin: number | null | undefined;
+  salaryMax: number | null | undefined;
+  eligibility: string | null;
+  deadline: string | null;
   skills: string[];
   compatibilityScore: number;
 }
@@ -133,7 +133,7 @@ export default function StudentPlacementsPage() {
       const matchesSearch =
         item.title.toLowerCase().includes(q) ||
         item.companyName.toLowerCase().includes(q) ||
-        item.description.toLowerCase().includes(q) ||
+        (item.description || "").toLowerCase().includes(q) ||
         item.skills.some((s) => s.toLowerCase().includes(q));
       if (!matchesSearch) return false;
     }

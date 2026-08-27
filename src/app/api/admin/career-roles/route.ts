@@ -4,6 +4,8 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { SkillCategory } from "@prisma/client";
 
+export const dynamic = "force-dynamic";
+
 // GET: List all career roles (with optional filters)
 export async function GET(request: Request) {
   try {
@@ -79,7 +81,7 @@ export async function POST(request: Request) {
       where: { email: session.user.email.toLowerCase() },
     });
 
-    if (!user || user.role !== "ADMIN") {
+    if (!user || ((user.role as string) !== "ADMIN" && user.role !== "INSTITUTION")) {
       return NextResponse.json({ error: "Forbidden: Admin access required" }, { status: 403 });
     }
 

@@ -423,8 +423,8 @@ export default function InstitutionDashboardPage() {
                   <tr>
                     <th>Corporate Partner</th>
                     <th>Partnership Type</th>
-                    <th>Department Focus</th>
-                    <th>Students Placed</th>
+                    <th>Collaboration Focus</th>
+                    <th>Institution Partner</th>
                     <th>Status</th>
                   </tr>
                 </thead>
@@ -433,12 +433,12 @@ export default function InstitutionDashboardPage() {
                     <tr key={c.id}>
                       <td className="font-semibold text-slate-900 dark:text-slate-100">{c.companyName}</td>
                       <td>
-                        <Badge variant="secondary">{c.partnershipType}</Badge>
+                        <Badge variant="secondary">{c.type}</Badge>
                       </td>
-                      <td className="text-slate-600 dark:text-slate-300 text-xs">{c.department}</td>
-                      <td className="font-mono text-xs font-bold">{c.studentsBenefited}</td>
+                      <td className="text-slate-600 dark:text-slate-300 text-xs">{c.title}</td>
+                      <td className="text-slate-600 dark:text-slate-300 text-xs">{c.institutionName}</td>
                       <td>
-                        <Badge variant="success">Active</Badge>
+                        <Badge variant="success">{c.status}</Badge>
                       </td>
                     </tr>
                   ))}

@@ -34,15 +34,15 @@ interface InternshipItem {
   id: string;
   title: string;
   type: string;
-  description: string;
+  description: string | null;
   companyName: string;
-  companyLogo: string | null;
-  location: string;
+  companyLogo?: string | null;
+  location: string | null;
   remote: boolean;
-  duration: string;
+  duration: string | null;
   stipend: number | null;
-  eligibility: string;
-  deadline: string;
+  eligibility: string | null;
+  deadline: string | null;
   skills: string[];
   compatibilityScore: number;
 }
@@ -129,7 +129,7 @@ export default function StudentInternshipsPage() {
       const matchesSearch =
         item.title.toLowerCase().includes(q) ||
         item.companyName.toLowerCase().includes(q) ||
-        item.description.toLowerCase().includes(q) ||
+        (item.description || "").toLowerCase().includes(q) ||
         item.skills.some((s) => s.toLowerCase().includes(q));
       if (!matchesSearch) return false;
     }
