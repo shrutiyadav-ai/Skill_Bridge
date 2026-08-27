@@ -76,9 +76,11 @@ Traditional higher education often produces a significant mismatch between acade
 - **Training & Placement Office (TPO) Hub**: Centralized placement statistics, recruiter contacts, and student verification.
 
 ### 👨‍🏫 4. Academician & Faculty Portal
-- **Faculty Development Programs (FDPs)**: Discover and apply for sponsored upskilling and faculty development programs.
-- **Research Grants & Consultancy Hub**: Manage funded research projects (DST/SERB/AICTE), publications (with DOI), and patent filings.
-- **Industry-Academia Collaboration**: Engagement channels for student project mentorship, guest lectures, and corporate consultancy.
+- **Dedicated Faculty Opportunities Module (`/academia/faculty-opportunities`)**: Discover, filter, and apply for sponsored Faculty Development Programs (FDPs), industrial sabbaticals/internships, technical workshops, and mentorship calls.
+- **Dedicated Research & Consultancy Module (`/academia/research-consultancy`)**: Explore sponsored R&D calls, industrial research grants (AI, Cloud, Cybersecurity), and corporate advisory consultancy with project scope briefs, budget ranges, and proposal submission.
+- **Dedicated Collaboration Module (`/academia/collaboration`)**: Manage active institutional MoUs, live student capstone mentorship, guest lecture drives, and corporate hackathon partnerships.
+- **Executive Analytics Overview (`/academia/analytics` & `/academician/dashboard`)**: Centralized portal overview linking directly to all three specialized modules.
+- **Unified Academic Profile (`/academician/profile`)**: Manage research interests, patents, publications (with DOI), and subjects taught.
 
 ---
 

@@ -19,6 +19,10 @@ import {
   Building2,
   ExternalLink,
   Plus,
+  ArrowRight,
+  ChevronRight,
+  Handshake,
+  FileText,
 } from "lucide-react";
 
 export default function AcademicianDashboardPage() {
@@ -60,11 +64,98 @@ export default function AcademicianDashboardPage() {
             </p>
           </div>
 
-          <Link href="/opportunities?type=RESEARCH">
+          <Link href="/academia/research-consultancy">
             <Button size="sm" className="gap-1.5 text-xs bg-navy-800 dark:bg-blue-600 text-white">
               <Plus className="h-4 w-4" />
               Propose Research Collaboration
             </Button>
+          </Link>
+        </div>
+
+        {/* 3 Core Module Jump Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {/* Card 1: Faculty Opportunities */}
+          <Link href="/academia/faculty-opportunities" className="block group">
+            <Card className="h-full hover:border-navy-300 dark:hover:border-blue-700 transition shadow-xs">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <div className="h-10 w-10 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-navy-800 dark:text-blue-400 flex items-center justify-center">
+                    <BookOpen className="h-5 w-5" />
+                  </div>
+                  <Badge variant="primary" className="text-[10px]">
+                    FDP & Internships
+                  </Badge>
+                </div>
+                <CardTitle className="text-base font-bold mt-2 text-slate-900 dark:text-white group-hover:text-navy-800 dark:group-hover:text-blue-400 transition">
+                  Faculty Opportunities Module
+                </CardTitle>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  Discover sponsored FDP programs, technical workshops, and industrial faculty internships.
+                </p>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <div className="flex items-center justify-between text-xs font-semibold text-navy-800 dark:text-blue-400 mt-1">
+                  <span>Explore Faculty Programs</span>
+                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+
+          {/* Card 2: Research & Consultancy */}
+          <Link href="/academia/research-consultancy" className="block group">
+            <Card className="h-full hover:border-navy-300 dark:hover:border-blue-700 transition shadow-xs">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <div className="h-10 w-10 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                    <Network className="h-5 w-5" />
+                  </div>
+                  <Badge variant="success" className="text-[10px]">
+                    Grants & Consultancy
+                  </Badge>
+                </div>
+                <CardTitle className="text-base font-bold mt-2 text-slate-900 dark:text-white group-hover:text-navy-800 dark:group-hover:text-blue-400 transition">
+                  Research & Consultancy Module
+                </CardTitle>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  Participate in industry-sponsored research calls, funded grants, and expert corporate advisory.
+                </p>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <div className="flex items-center justify-between text-xs font-semibold text-navy-800 dark:text-blue-400 mt-1">
+                  <span>Explore R&D Calls</span>
+                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+
+          {/* Card 3: Collaboration */}
+          <Link href="/academia/collaboration" className="block group">
+            <Card className="h-full hover:border-navy-300 dark:hover:border-blue-700 transition shadow-xs">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <div className="h-10 w-10 rounded-lg bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 flex items-center justify-center">
+                    <Handshake className="h-5 w-5" />
+                  </div>
+                  <Badge variant="warning" className="text-[10px]">
+                    MoUs & Capstones
+                  </Badge>
+                </div>
+                <CardTitle className="text-base font-bold mt-2 text-slate-900 dark:text-white group-hover:text-navy-800 dark:group-hover:text-blue-400 transition">
+                  Collaboration Module
+                </CardTitle>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  Join live student capstone mentoring, guest lecture series, and corporate innovation hackathons.
+                </p>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <div className="flex items-center justify-between text-xs font-semibold text-navy-800 dark:text-blue-400 mt-1">
+                  <span>Explore Partnerships</span>
+                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </CardContent>
+            </Card>
           </Link>
         </div>
 
@@ -99,114 +190,164 @@ export default function AcademicianDashboardPage() {
               <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Faculty Internships
               </span>
-              <div className="text-3xl font-extrabold text-slate-900 dark:text-white mt-2 font-mono">
+              <div className="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-2 font-mono">
                 {facultyOpportunities.filter((o) => o.type === "FACULTY_INTERNSHIP").length}
               </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-2">Industry immersion programs</p>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-2">Industrial sabbaticals</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardContent className="p-5">
               <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                My Applications
+                Active MoUs
               </span>
-              <div className="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-2 font-mono">
-                {appliedOpps.length}
+              <div className="text-3xl font-extrabold text-slate-900 dark:text-white mt-2 font-mono">
+                {MOCK_COLLABORATIONS.length}
               </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-2">Submitted proposals</p>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-2">Corporate partners</p>
             </CardContent>
           </Card>
         </div>
 
-        {/* 2-Column Section: Faculty Opportunities & Active Industry Collaborations */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Opportunities (2 cols) */}
-          <div className="lg:col-span-2 space-y-6">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-3">
-                <div>
-                  <CardTitle>Faculty Opportunities & Research Calls</CardTitle>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                    Explore enterprise sponsored FDPs, sabbaticals, and joint R&D projects
-                  </p>
-                </div>
-                <Link href="/opportunities?type=FDP">
-                  <Button variant="ghost" size="sm" className="text-xs text-navy-800 dark:text-blue-400">
-                    Explore All
-                  </Button>
-                </Link>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {facultyOpportunities.map((opp) => {
-                  const isApplied = appliedOpps.includes(opp.id);
-                  return (
-                    <div
-                      key={opp.id}
-                      className="p-4 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
-                    >
-                      <div className="space-y-2">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <h4 className="font-bold text-sm text-slate-900 dark:text-white">{opp.title}</h4>
-                          <Badge variant="secondary">{opp.type}</Badge>
-                          {opp.remote && <Badge variant="outline">Remote</Badge>}
-                        </div>
-                        <p className="text-xs text-slate-600 dark:text-slate-400 font-medium">
-                          {opp.companyName} • {opp.location} • Deadline: {formatDate(opp.deadline)}
-                        </p>
-                        <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-2">
-                          {opp.description}
-                        </p>
-                      </div>
+        {/* Featured Faculty Opportunities Table */}
+        <Card>
+          <CardHeader className="pb-3 flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Featured Faculty Programs & Grants</CardTitle>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Programs open for faculty application, research collaboration, and consultancy
+              </p>
+            </div>
+            <Link href="/academia/faculty-opportunities">
+              <Button variant="ghost" size="sm" className="text-xs text-navy-800 dark:text-blue-400 gap-1">
+                View All Programs
+                <ChevronRight className="h-3.5 w-3.5" />
+              </Button>
+            </Link>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Opportunity Title</th>
+                    <th>Type</th>
+                    <th>Host Organization</th>
+                    <th>Duration</th>
+                    <th>Eligibility</th>
+                    <th>Deadline</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {facultyOpportunities.map((opp) => {
+                    const isApplied = appliedOpps.includes(opp.id);
 
-                      <div className="shrink-0 self-end sm:self-center">
-                        {isApplied ? (
-                          <Badge variant="success" className="gap-1">
-                            <CheckCircle2 className="h-3 w-3" />
-                            Applied
+                    return (
+                      <tr key={opp.id}>
+                        <td className="font-semibold text-slate-900 dark:text-slate-100">
+                          {opp.title}
+                        </td>
+                        <td>
+                          <Badge
+                            variant={
+                              opp.type === "FDP"
+                                ? "primary"
+                                : opp.type === "RESEARCH"
+                                ? "success"
+                                : "secondary"
+                            }
+                          >
+                            {opp.type.replace("_", " ")}
                           </Badge>
-                        ) : (
+                        </td>
+                        <td className="text-slate-600 dark:text-slate-300">{opp.companyName}</td>
+                        <td className="text-slate-600 dark:text-slate-300 text-xs font-mono">
+                          {opp.duration}
+                        </td>
+                        <td className="text-slate-500 dark:text-slate-400 text-xs max-w-xs truncate">
+                          {opp.eligibility}
+                        </td>
+                        <td className="text-slate-500 dark:text-slate-400 text-xs font-mono">
+                          {formatDate(opp.deadline)}
+                        </td>
+                        <td>
                           <Button
                             size="sm"
+                            disabled={isApplied}
                             onClick={() => handleApplyFaculty(opp.id)}
-                            className="text-xs bg-navy-800 dark:bg-blue-600 text-white"
+                            className={`text-xs ${
+                              isApplied
+                                ? "bg-emerald-600 text-white cursor-default"
+                                : "bg-navy-800 dark:bg-blue-600 text-white"
+                            }`}
                           >
-                            Apply / Register
+                            {isApplied ? (
+                              <>
+                                <CheckCircle2 className="h-3 w-3 mr-1 inline" /> Applied
+                              </>
+                            ) : (
+                              "Apply"
+                            )}
                           </Button>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </CardContent>
-            </Card>
-          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
 
-          {/* Active Industry Collaborations (1 col) */}
-          <div className="space-y-6" id="collaborations">
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle>Industry Partnerships</CardTitle>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Active MoUs & joint initiatives</p>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {MOCK_COLLABORATIONS.map((collab) => (
-                  <div
-                    key={collab.id}
-                    className="p-3.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-850/50 space-y-2 text-xs"
-                  >
-                    <div className="flex justify-between items-start">
-                      <span className="font-bold text-slate-900 dark:text-white">{collab.companyName}</span>
-                      <Badge variant="success">{collab.status}</Badge>
-                    </div>
-                    <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-snug">{collab.title}</p>
-                    <div className="text-[10px] text-slate-400 font-mono">Scope: {collab.type}</div>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+        {/* Active Industry Collaborations Table */}
+        <Card id="collaborations">
+          <CardHeader className="pb-3 flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Industry-Academia Collaboration Initiatives</CardTitle>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Active joint research, student capstone mentorship, and guest lecture initiatives
+              </p>
+            </div>
+            <Link href="/academia/collaboration">
+              <Button variant="ghost" size="sm" className="text-xs text-navy-800 dark:text-blue-400 gap-1">
+                Collaborations Hub
+                <ChevronRight className="h-3.5 w-3.5" />
+              </Button>
+            </Link>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Initiative Title</th>
+                    <th>Partner Company</th>
+                    <th>Partner Institution</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {MOCK_COLLABORATIONS.map((c) => (
+                    <tr key={c.id}>
+                      <td className="font-semibold text-slate-900 dark:text-slate-100">{c.title}</td>
+                      <td className="text-slate-600 dark:text-slate-300">{c.companyName}</td>
+                      <td className="text-slate-600 dark:text-slate-300 text-xs">{c.institutionName}</td>
+                      <td>
+                        <Badge variant="secondary">{c.type}</Badge>
+                      </td>
+                      <td>
+                        <Badge variant="success">Active</Badge>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </DashboardLayout>
   );

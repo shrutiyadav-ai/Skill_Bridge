@@ -65,10 +65,11 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   const academicianNavItems = [
     { label: "Faculty Portal", href: "/academician/dashboard", icon: LayoutDashboard },
+    { label: "Faculty Opportunities", href: "/academia/faculty-opportunities", icon: BookOpen },
+    { label: "Research & Consultancy", href: "/academia/research-consultancy", icon: Network },
+    { label: "Collaboration", href: "/academia/collaboration", icon: Handshake },
     { label: "Faculty Profile", href: "/academician/profile", icon: FileUser },
-    { label: "Faculty Opportunities", href: "/opportunities?type=FDP", icon: BookOpen },
-    { label: "Research & Consultancy", href: "/opportunities?type=RESEARCH", icon: Network },
-    { label: "Collaborations", href: "/academician/dashboard#collaborations", icon: Building2 },
+    { label: "All Opportunities", href: "/opportunities", icon: Compass },
   ];
 
   let navItems = studentNavItems;

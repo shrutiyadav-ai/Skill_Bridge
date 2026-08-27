@@ -16,7 +16,8 @@ export async function middleware(req: NextRequest) {
     path.startsWith("/student") ||
     path.startsWith("/industry") ||
     path.startsWith("/institution") ||
-    path.startsWith("/academician");
+    path.startsWith("/academician") ||
+    path.startsWith("/academia");
 
   // Helper to map role to correct dashboard path
   const getRoleDashboard = (role?: string): string => {
@@ -63,7 +64,7 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL(getRoleDashboard(userRole), req.url));
     }
 
-    if (path.startsWith("/academician") && userRole !== "ACADEMICIAN") {
+    if ((path.startsWith("/academician") || path.startsWith("/academia")) && userRole !== "ACADEMICIAN") {
       return NextResponse.redirect(new URL(getRoleDashboard(userRole), req.url));
     }
   }
@@ -79,5 +80,6 @@ export const config = {
     "/industry/:path*",
     "/institution/:path*",
     "/academician/:path*",
+    "/academia/:path*",
   ],
 };
