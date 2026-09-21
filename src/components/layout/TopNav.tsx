@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Menu, Bell, LogOut, Sparkles, ChevronDown } from "lucide-react";
 import { MOCK_NOTIFICATIONS } from "@/lib/mock-data";
 import { getRelativeTime } from "@/lib/utils";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 interface TopNavProps {
   onMenuClick: () => void;
@@ -81,6 +82,9 @@ export function TopNav({ onMenuClick }: TopNavProps) {
       </div>
 
       <div className="flex items-center gap-2 sm:gap-3">
+        {/* Light / Dark Mode Toggle */}
+        <ThemeToggle />
+
         {/* Demo Fast Role Switcher */}
         {isDemoUser && (
           <div className="relative">

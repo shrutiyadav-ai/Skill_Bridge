@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 import { Logo } from "@/components/brand/Logo";
 
@@ -41,6 +42,7 @@ export default function LandingPage() {
         </nav>
 
         <div className="flex items-center gap-2 sm:gap-3">
+          <ThemeToggle />
           <Link href="/login">
             <Button variant="ghost" size="sm">
               Sign In

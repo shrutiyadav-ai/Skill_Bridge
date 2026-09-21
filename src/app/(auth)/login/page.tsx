@@ -6,6 +6,7 @@ import { signIn, getSession } from "next-auth/react";
 import { Button } from "@/components/ui/Button";
 import { Sparkles, AlertCircle, Loader2 } from "lucide-react";
 import { getRoleDashboardPath } from "@/lib/auth";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { Logo } from "@/components/brand/Logo";
 
 export default function LoginPage() {
@@ -57,7 +58,11 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 transition-colors duration-150">
+      <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
+        <ThemeToggle />
+      </div>
+
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <Link href="/" className="flex flex-col items-center justify-center gap-2.5 group">
           <Logo size="lg" showBorder className="group-hover:scale-105 transition-transform shadow-sm" />

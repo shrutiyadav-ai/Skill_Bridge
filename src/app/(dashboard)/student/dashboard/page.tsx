@@ -63,16 +63,15 @@ export default function StudentDashboardPage() {
         const res = await fetch("/api/profile");
         if (res.ok) {
           const data = await res.json();
-          const rawSkills = data.user?.userSkills || data.userSkills || data.skills;
-          if (Array.isArray(rawSkills) && rawSkills.length > 0) {
+          if (data.skills && data.skills.length > 0) {
             setUserSkills(
-              rawSkills.map((s: any) => ({
+              data.skills.map((s: any) => ({
                 id: s.id,
                 skillId: s.skillId,
-                skillName: s.skill?.name || s.skillName || s.name || "Skill",
-                category: s.skill?.category || s.category || "TECHNICAL",
-                score: Number(s.score) || 0,
-                verified: s.verified ?? true,
+                skillName: s.name,
+                category: s.category || "TECHNICAL",
+                score: s.score || 0,
+                verified: s.verified || false,
                 source: s.source || "assessment",
               }))
             );
@@ -102,20 +101,7 @@ export default function StudentDashboardPage() {
         }
       } catch (e) {}
 
-      // 4. Fetch real student applications from database
-      try {
-        const res = await fetch("/api/student/applications");
-        if (res.ok) {
-          const data = await res.json();
-          if (data.applications && data.applications.length > 0) {
-            setUserApplications(data.applications);
-          } else if (isDemoStudent) {
-            setUserApplications(MOCK_APPLICATIONS);
-          }
-        }
-      } catch (e) {}
-
-      // Fallback to local storage if API returned no skills/applications
+      // Check local storage for skills and applications
       if (studentEmail) {
         const stored = localStorage.getItem(`assessed_skills_${studentEmail}`);
         if (stored && userSkills.length === 0) {
@@ -124,7 +110,7 @@ export default function StudentDashboardPage() {
           } catch (e) {}
         }
         const storedApps = localStorage.getItem(`applications_${studentEmail}`);
-        if (storedApps && userApplications.length === 0) {
+        if (storedApps) {
           try {
             setUserApplications(JSON.parse(storedApps));
           } catch (e) {}

@@ -50,12 +50,11 @@ export default function CareerRoadmapPage() {
         const profileRes = await fetch("/api/profile");
         if (profileRes.ok) {
           const profileData = await profileRes.json();
-          const rawSkills = profileData.user?.userSkills || profileData.userSkills || profileData.skills;
-          if (Array.isArray(rawSkills) && rawSkills.length > 0) {
-            const mapped = rawSkills.map((us: any) => ({
+          if (profileData.userSkills && profileData.userSkills.length > 0) {
+            const mapped = profileData.userSkills.map((us: any) => ({
               id: us.id,
               skillId: us.skillId,
-              skillName: us.skill?.name || us.skillName || us.name || "Skill",
+              skillName: us.skill?.name || us.skillName || "Skill",
               category: us.skill?.category || us.category || "TECHNICAL",
               score: Number(us.score),
               verified: us.verified ?? true,
