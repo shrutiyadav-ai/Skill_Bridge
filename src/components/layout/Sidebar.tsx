@@ -55,7 +55,6 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     { label: "Dashboard", href: "/industry/dashboard", icon: LayoutDashboard },
     { label: "Post Opportunities", href: "/industry/opportunities/new", icon: Briefcase },
     { label: "Candidate Match Pool", href: "/industry/candidates", icon: Users },
-    { label: "Institutional Partnerships", href: "/academia/collaboration", icon: Handshake },
     { label: "Company Profile", href: "/industry/profile", icon: Building2 },
   ];
 

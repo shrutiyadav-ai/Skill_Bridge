@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSession, signOut, signIn } from "next-auth/react";
 import Link from "next/link";
 import { Menu, Bell, LogOut, Sparkles, ChevronDown } from "lucide-react";
@@ -12,11 +12,28 @@ interface TopNavProps {
   onMenuClick: () => void;
 }
 
+const DEMO_EMAILS = [
+  "aditya.sharma@iitd.ac.in",
+  "hr@flipkart.com",
+  "admin@iitdelhi.ac.in",
+  "dr.raghavan@iitd.ac.in",
+];
+
 export function TopNav({ onMenuClick }: TopNavProps) {
   const { data: session } = useSession();
   const [showNotifications, setShowNotifications] = useState(false);
-  const [notifications, setNotifications] = useState(MOCK_NOTIFICATIONS);
   const [showRoleSwitcher, setShowRoleSwitcher] = useState(false);
+
+  const isDemoUser = DEMO_EMAILS.includes(session?.user?.email || "");
+  const [notifications, setNotifications] = useState<typeof MOCK_NOTIFICATIONS>([]);
+
+  useEffect(() => {
+    if (isDemoUser) {
+      setNotifications(MOCK_NOTIFICATIONS);
+    } else {
+      setNotifications([]);
+    }
+  }, [isDemoUser]);
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
@@ -69,56 +86,58 @@ export function TopNav({ onMenuClick }: TopNavProps) {
         <ThemeToggle />
 
         {/* Demo Fast Role Switcher */}
-        <div className="relative">
-          <button
-            onClick={() => {
-              setShowRoleSwitcher(!showRoleSwitcher);
-              setShowNotifications(false);
-            }}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-md border border-slate-200 dark:border-slate-700 transition"
-            title="Switch demo persona"
-          >
-            <Sparkles className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
-            <span className="hidden md:inline">Switch Role</span>
-            <ChevronDown className="h-3 w-3 text-slate-400" />
-          </button>
+        {isDemoUser && (
+          <div className="relative">
+            <button
+              onClick={() => {
+                setShowRoleSwitcher(!showRoleSwitcher);
+                setShowNotifications(false);
+              }}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-md border border-slate-200 dark:border-slate-700 transition"
+              title="Switch demo persona"
+            >
+              <Sparkles className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
+              <span className="hidden md:inline">Switch Role</span>
+              <ChevronDown className="h-3 w-3 text-slate-400" />
+            </button>
 
-          {showRoleSwitcher && (
-            <div className="absolute right-0 mt-2 w-72 bg-white dark:bg-slate-900 rounded-lg shadow-lg border border-slate-200 dark:border-slate-800 py-2 z-50 text-xs">
-              <div className="px-3 py-1.5 border-b border-slate-100 dark:border-slate-800 font-semibold text-slate-700 dark:text-slate-300">
-                Switch Workspace Persona
+            {showRoleSwitcher && (
+              <div className="absolute right-0 mt-2 w-72 bg-white dark:bg-slate-900 rounded-lg shadow-lg border border-slate-200 dark:border-slate-800 py-2 z-50 text-xs">
+                <div className="px-3 py-1.5 border-b border-slate-100 dark:border-slate-800 font-semibold text-slate-700 dark:text-slate-300">
+                  Switch Workspace Persona
+                </div>
+                <button
+                  onClick={() => handleQuickRoleSwitch("aditya.sharma@iitd.ac.in")}
+                  className="w-full text-left px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 flex flex-col"
+                >
+                  <span className="font-medium text-slate-900 dark:text-slate-100">Student: Aditya Sharma</span>
+                  <span className="text-[11px] text-slate-500 dark:text-slate-400">ML Track (IIT Delhi)</span>
+                </button>
+                <button
+                  onClick={() => handleQuickRoleSwitch("hr@flipkart.com")}
+                  className="w-full text-left px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 flex flex-col"
+                >
+                  <span className="font-medium text-slate-900 dark:text-slate-100">Industry: Flipkart HR</span>
+                  <span className="text-[11px] text-slate-500 dark:text-slate-400">Postings & Candidate Matching</span>
+                </button>
+                <button
+                  onClick={() => handleQuickRoleSwitch("admin@iitdelhi.ac.in")}
+                  className="w-full text-left px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 flex flex-col"
+                >
+                  <span className="font-medium text-slate-900 dark:text-slate-100">Institution: IIT Delhi Admin</span>
+                  <span className="text-[11px] text-slate-500 dark:text-slate-400">Readiness & Skill Gap Analytics</span>
+                </button>
+                <button
+                  onClick={() => handleQuickRoleSwitch("dr.raghavan@iitd.ac.in")}
+                  className="w-full text-left px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 flex flex-col"
+                >
+                  <span className="font-medium text-slate-900 dark:text-slate-100">Academician: Dr. S. Raghavan</span>
+                  <span className="text-[11px] text-slate-500 dark:text-slate-400">FDPs, Research & Consultancy</span>
+                </button>
               </div>
-              <button
-                onClick={() => handleQuickRoleSwitch("aditya.sharma@iitd.ac.in")}
-                className="w-full text-left px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 flex flex-col"
-              >
-                <span className="font-medium text-slate-900 dark:text-slate-100">Student: Aditya Sharma</span>
-                <span className="text-[11px] text-slate-500 dark:text-slate-400">ML Track (IIT Delhi)</span>
-              </button>
-              <button
-                onClick={() => handleQuickRoleSwitch("hr@flipkart.com")}
-                className="w-full text-left px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 flex flex-col"
-              >
-                <span className="font-medium text-slate-900 dark:text-slate-100">Industry: Flipkart HR</span>
-                <span className="text-[11px] text-slate-500 dark:text-slate-400">Postings & Candidate Matching</span>
-              </button>
-              <button
-                onClick={() => handleQuickRoleSwitch("admin@iitdelhi.ac.in")}
-                className="w-full text-left px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 flex flex-col"
-              >
-                <span className="font-medium text-slate-900 dark:text-slate-100">Institution: IIT Delhi Admin</span>
-                <span className="text-[11px] text-slate-500 dark:text-slate-400">Readiness & Skill Gap Analytics</span>
-              </button>
-              <button
-                onClick={() => handleQuickRoleSwitch("dr.raghavan@iitd.ac.in")}
-                className="w-full text-left px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 flex flex-col"
-              >
-                <span className="font-medium text-slate-900 dark:text-slate-100">Academician: Dr. S. Raghavan</span>
-                <span className="text-[11px] text-slate-500 dark:text-slate-400">FDPs, Research & Consultancy</span>
-              </button>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
 
         {/* Notifications Dropdown */}
         <div className="relative">

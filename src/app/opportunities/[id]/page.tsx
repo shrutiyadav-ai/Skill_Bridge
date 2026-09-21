@@ -78,7 +78,7 @@ export default function OpportunityDetailPage({ params }: { params: { id: string
         body: JSON.stringify({ opportunityId: opp.id }),
       });
     } catch (e) {
-      console.log("Recorded application locally");
+      // Application recorded locally as fallback
     }
 
     setTimeout(() => {

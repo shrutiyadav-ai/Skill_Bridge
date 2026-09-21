@@ -140,7 +140,7 @@ export default function LoginPage() {
           <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800">
             <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 mb-3">
               <Sparkles className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
-              <span>Quick Sign-In (Demo Accounts in Supabase):</span>
+              <span>Quick Sign-In (Demo Accounts):</span>
             </div>
 
             <div className="grid grid-cols-2 gap-2">
@@ -185,7 +185,7 @@ export default function LoginPage() {
               </button>
             </div>
             <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-2 text-center">
-              Password: <span className="font-mono text-slate-600 dark:text-slate-400">SkillBridge@2024</span> (Verified via Prisma + Supabase)
+              Password: <span className="font-mono text-slate-600 dark:text-slate-400">SkillBridge@2024</span>
             </p>
           </div>
 

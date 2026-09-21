@@ -82,7 +82,7 @@ export default function NewOpportunityPage() {
         body: JSON.stringify(newPosting),
       });
     } catch (err) {
-      console.log("Recorded opportunity locally");
+      // Opportunity recorded locally as fallback
     }
 
     setTimeout(() => {
