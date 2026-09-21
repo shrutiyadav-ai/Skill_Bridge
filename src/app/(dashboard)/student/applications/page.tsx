@@ -35,13 +35,34 @@ export default function StudentApplicationsPage() {
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    if (!isDemoStudent && studentEmail) {
-      const stored = localStorage.getItem(`applications_${studentEmail}`);
-      if (stored) {
-        try {
-          setApplications(JSON.parse(stored));
-        } catch (e) {}
+    async function fetchApps() {
+      try {
+        const res = await fetch("/api/student/applications");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.applications && data.applications.length > 0) {
+            setApplications(data.applications);
+            return;
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch applications:", err);
       }
+
+      if (isDemoStudent) {
+        setApplications(MOCK_APPLICATIONS);
+      } else if (studentEmail) {
+        const stored = localStorage.getItem(`applications_${studentEmail}`);
+        if (stored) {
+          try {
+            setApplications(JSON.parse(stored));
+          } catch (e) {}
+        }
+      }
+    }
+
+    if (studentEmail) {
+      fetchApps();
     }
   }, [isDemoStudent, studentEmail]);
 

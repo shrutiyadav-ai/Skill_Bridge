@@ -143,6 +143,8 @@ export async function GET(request: Request) {
 
     return NextResponse.json({
       user,
+      skills: user.userSkills,
+      userSkills: user.userSkills,
       completeness,
       missingSuggestions,
     });

@@ -7,7 +7,6 @@ import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/Button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { MOCK_OPPORTUNITIES, MOCK_STUDENT_SKILLS } from "@/lib/mock-data";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import {
@@ -100,7 +99,6 @@ export default function OpportunityDetailPage({ params }: { params: { id: string
             Back to Marketplace
           </Link>
           <div className="flex items-center gap-2">
-            <ThemeToggle />
             {session && (
               <Link href="/student/dashboard">
                 <Button size="sm" variant="ghost" className="text-xs">
